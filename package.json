@@ -1,0 +1,33 @@
+{
+  "name": "@nrk/webview-bridge",
+  "homepage": "https://nrkno.github.io/webview-bridge/",
+  "author": "NRK <opensource@nrk.no> (https://www.nrk.no/)",
+  "version": "1.0.0",
+  "license": "MIT",
+  "main": "dist/webview-bridge.min.js",
+  "scripts": {
+    "build": "rimraf dist/ && webpack",
+    "prepare": "npm run build",
+    "publish:patch": "npm version patch -m 'Release patch %s' && npm run push",
+    "publish:minor": "npm version minor -m 'Release minor %s' && npm run push",
+    "publish:major": "npm version major -m 'Release major %s' && npm run push",
+    "push": "git push && git push --tags && npm publish",
+    "start": "NODE_ENV=development webpack-dev-server -d",
+    "static-publish": "static-publish publish --directory ./dist --package ./package.json --verbose --latest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nrkno/webview-bridge.git"
+  },
+  "devDependencies": {
+    "@nrk/static-publish-cli": "^3.0.5",
+    "babel-core": "^6.26.0",
+    "babel-loader": "^7.1.2",
+    "babel-preset-es2015": "^6.24.1",
+    "cpx": "^1.5.0",
+    "rimraf": "^2.6.1",
+    "standard": "^10.0.3",
+    "webpack": "^3.5.6",
+    "webpack-dev-server": "^2.7.1"
+  }
+}
