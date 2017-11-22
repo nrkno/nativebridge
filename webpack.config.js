@@ -7,14 +7,14 @@ module.exports = {
     contentBase: [path.join(__dirname, 'src')]
   },
   entry: {
-    'webview-bridge': './index.js',
-    'webview-bridge.min': './index.js'
+    'nativebridge': './index.js',
+    'nativebridge.min': './index.js'
   },
   output: {
     path: path.resolve(__dirname, 'dist'),
     publicPath: '/',
     filename: '[name].js',
-    library: 'webview-bridge',
+    library: 'nativebridge',
     libraryTarget: 'umd'
   },
   module: {

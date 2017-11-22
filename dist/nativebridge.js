@@ -4,9 +4,9 @@
 	else if(typeof define === 'function' && define.amd)
 		define([], factory);
 	else if(typeof exports === 'object')
-		exports["webview-bridge"] = factory();
+		exports["nativebridge"] = factory();
 	else
-		root["webview-bridge"] = factory();
+		root["nativebridge"] = factory();
 })(this, function() {
 return /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
@@ -80,36 +80,48 @@ return /******/ (function(modules) { // webpackBootstrap
 "use strict";
 
 
-module.exports = {
-  subscribtions: {},
-  on: function on(type, handler) {
-    Native.off(type, handler).push(handler);
-  },
-  off: function off(type, handler) {
-    var subs = window[KEY].subscribtions;
-    return subs[type] = handler ? subs[type].filter(function (fn) {
-      return fn !== handler;
-    }) : [];
-  },
-  handleAction: function handleAction(action) {
-    var subs = Native.subscribtions(subs[action.type] || []).map(function (handler) {
-      handler(action);
-    })(subs['*'] || []).map(function (handler) {
-      handler(action);
-    });
-  },
-  send: function send(action) {
-    if (!action.type) {
-      console.log('please provide a action.type');
-    } else if (window.webkit && window.webkit.messageHandlers) {
-      window.webkit.messageHandlers.iOSJS.postMessage(action);
-    } else if (window.andriodJS) {
-      window.andriodJS.test(JSON.stringify(action));
-    } else {
-      console.log('no message handler context');
-    }
+var events = {};
+
+function on(type, handler) {
+  off(type, handler).push(handler);
+}
+
+function off(type, handler) {
+  events[type] = handler ? events[type].filter(function (fn) {
+    return fn !== handler;
+  }) : [];
+  return events[type];
+}
+
+function emit(type) {
+  for (var _len = arguments.length, value = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
+    value[_key - 1] = arguments[_key];
   }
-};
+
+  console.log(value);
+  if (window.webkit && window.webkit.messageHandlers) {
+    window.webkit.messageHandlers.nativebridge.postMessage({ type: type, value: value });
+  } else if (window.nativebridgeAndroid) {
+    window.nativebridge.test(JSON.stringify({ type: type, value: value }));
+  } else {
+    console.log('no message handler context');
+  }
+}
+
+if (typeof window !== 'undefined') {
+  window.addEventListener('webview-bridge', function (_ref) {
+    var details = _ref.details;
+
+    (events[details.type] || []).concat(events['*'] || []).map(function (handler) {
+      return handler(details.value);
+    });
+  });
+  window.addEventListener('DOMContentLoaded', function () {
+    return emit('ready');
+  });
+}
+
+module.exports = { on: on, off: off, emit: emit };
 
 /***/ })
 /******/ ]);

@@ -1,12 +1,12 @@
 {
-  "name": "@nrk/webview-bridge",
-  "homepage": "https://nrkno.github.io/webview-bridge/",
+  "name": "@nrk/nativebridge",
+  "homepage": "https://nrkno.github.io/nativebridge/",
   "author": "NRK <opensource@nrk.no> (https://www.nrk.no/)",
   "version": "1.0.0",
   "license": "MIT",
-  "main": "dist/webview-bridge.min.js",
+  "main": "dist/nativebridge.min.js",
   "scripts": {
-    "build": "rimraf dist/ && webpack",
+    "build": "rimraf dist/ && cpx 'src/**/*.html' dist/ && webpack",
     "prepare": "npm run build",
     "publish:patch": "npm version patch -m 'Release patch %s' && npm run push",
     "publish:minor": "npm version minor -m 'Release minor %s' && npm run push",
@@ -17,7 +17,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/nrkno/webview-bridge.git"
+    "url": "git+https://github.com/nrkno/nativebridge.git"
   },
   "devDependencies": {
     "@nrk/static-publish-cli": "^3.0.5",
