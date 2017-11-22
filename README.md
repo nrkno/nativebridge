@@ -32,21 +32,21 @@ nativebridge.off('test', (data) => {})     // Unbind specific handler for 'test'
 ```
 
 
-#### USAGE
+### Usage
 
-Use with NPM:
+##### USE WITH NPM:
 ```
 npm install @nrk/nativebridge --save
 ```
 ```
 import nativebridge from '@nrk/nativebridge'
 ```
-Use with script-tag:
+##### USE WITH SCRIPT TAG:
 ```
 <script src="https://static.nrk.no/nativebridge/X.X.X/nativebridge.min.js"></script>
 <!-- window.nativebridge is now defined -->
 ```
-Use with require.js:
+##### USE WITH REQUIRE.JS:
 ```
 require(['https://static.nrk.no/nativebridge/X.X.X/nativebridge.min.js'], function(nativebridge) {
   /* code here */
