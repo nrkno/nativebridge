@@ -17,25 +17,49 @@ iOS 10.2+ | Android 4.4.4+
 
 Describe usage here
 
-##### Emit - *send to native*
+###### EMIT - *send to native*
 ```
 nativebridge.emit('test', { foo: 'bar' })  // Emit 'test' event with data object to native
 ```
-##### On  *receives from native*
+###### ON  *receives from native*
 ```
 nativebridge.on('test', (data) => {})      // Bind handler to 'test' event emitted from native
 ```
-##### Off
+###### OFF
 ```
 nativebridge.off('test')                   // Unbind all handlers for 'test' event
 nativebridge.off('test', (data) => {})     // Unbind specific handler for 'test' event
 ```
 
+
+##### USAGE
+
+Use with NPM:
+```
+npm install @nrk/nativebridge --save
+```
+```
+import nativebridge from '@nrk/nativebridge'
+```
+Use with script-tag:
+```
+<script src="https://static.nrk.no/nativebridge/X.X.X/nativebridge.min.js"></script>
+<!-- window.nativebridge is now defined -->
+```
+Use with require.js:
+```
+require(['https://static.nrk.no/nativebridge/X.X.X/nativebridge.min.js'], function(nativebridge) {
+  /* code here */
+});
+```
+
+---
+
 ## Android
 
 Describe usage here
 
-##### Example
+###### EXAMPLE
 ```
 private class nativebridgeAndroid {
   @JavascriptInterface
@@ -58,11 +82,13 @@ private class nativebridgeAndroid {
 webView.addJavascriptInterface(new nativebridgeAndroid(), "interface");
 ```
 
+---
+
 ## iOS
 
 Describe usage here
 
-##### Example
+###### EXAMPLE
 
 ```
 webView.evaluateJavaScript("window.dispatchEvent(new CustomEvent('webview-bridge', { detail: \(object) }))") {
