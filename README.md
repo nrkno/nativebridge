@@ -17,22 +17,22 @@ iOS 10.2+ | Android 4.4.4+
 
 Describe usage here
 
-###### EMIT - *send to native*
+##### EMIT - *send to native*
 ```
 nativebridge.emit('test', { foo: 'bar' })  // Emit 'test' event with data object to native
 ```
-###### ON  *receives from native*
+##### ON  *receives from native*
 ```
 nativebridge.on('test', (data) => {})      // Bind handler to 'test' event emitted from native
 ```
-###### OFF
+##### OFF
 ```
 nativebridge.off('test')                   // Unbind all handlers for 'test' event
 nativebridge.off('test', (data) => {})     // Unbind specific handler for 'test' event
 ```
 
 
-##### USAGE
+#### USAGE
 
 Use with NPM:
 ```
@@ -59,7 +59,7 @@ require(['https://static.nrk.no/nativebridge/X.X.X/nativebridge.min.js'], functi
 
 Describe usage here
 
-###### EXAMPLE
+##### EXAMPLE
 ```
 private class nativebridgeAndroid {
   @JavascriptInterface
@@ -88,7 +88,7 @@ webView.addJavascriptInterface(new nativebridgeAndroid(), "interface");
 
 Describe usage here
 
-###### EXAMPLE
+##### EXAMPLE
 
 ```
 webView.evaluateJavaScript("window.dispatchEvent(new CustomEvent('webview-bridge', { detail: \(object) }))") {
