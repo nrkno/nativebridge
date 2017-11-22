@@ -1,30 +1,32 @@
 const events = {}
 
 function on (type, handler) {
-  off(type, handler).push(handler)
+  if (typeof handler !== 'function') {
+    throw new Error('Handler must be of type function')
+  }
+  (events[type] = events[type] || []).push(handler)
 }
 
 function off (type, handler) {
-  events[type] = handler ? events[type].filter((fn) => fn !== handler) : []
-  return events[type]
+  events[type] = (events[type] || []).filter((fn) => handler && fn !== handler)
 }
 
-function emit (type, ...value) {
-  console.log(value)
+function emit (type, data = {}) {
   if (window.webkit && window.webkit.messageHandlers) {
-    window.webkit.messageHandlers.nativebridge.postMessage({type, value})
+    window.webkit.messageHandlers.nativebridgeiOS.postMessage({type, data})
   } else if (window.nativebridgeAndroid) {
-    window.nativebridge.test(JSON.stringify({type, value}))
+    window.nativebridgeAndroid.on(JSON.stringify({type, data}))
   } else {
     console.log('no message handler context')
   }
 }
 
+function onNative ({details: {type, data}}) {
+  (events[type] || []).forEach((handler) => handler(data))
+}
+
 if (typeof window !== 'undefined') {
-  window.addEventListener('webview-bridge', ({details}) => {
-    (events[details.type] || []).concat(events['*'] || []).map((handler) => handler(details.value))
-  })
-  window.addEventListener('DOMContentLoaded', () => emit('ready'))
+  window.addEventListener('nativebridge', onNative)
 }
 
 module.exports = { on, off, emit }

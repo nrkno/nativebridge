@@ -1,11 +1,15 @@
-# @nrk/webview-bridge
+# @nrk/nativebridge
+
+> Lightweight and efficient bridge between webview and native app
+
+*Documentation in progress*
 
 ## Local development
-First clone `@nrk/kaleido-ui` and install its dependencies:
+First clone `@nrk/nativebridge` and install its dependencies:
 
 ```bash
-git clone git@github.com:nrkno/kaleido-ui.git
-cd kaleido-ui
+git clone git@github.com:nrkno/nativebridge.git
+cd nativebridge
 npm install && npm start
 ```
 

@@ -83,42 +83,42 @@ return /******/ (function(modules) { // webpackBootstrap
 var events = {};
 
 function on(type, handler) {
-  off(type, handler).push(handler);
+  if (typeof handler !== 'function') {
+    throw new Error('Handler must be of type function');
+  }
+  (events[type] = events[type] || []).push(handler);
 }
 
 function off(type, handler) {
-  events[type] = handler ? events[type].filter(function (fn) {
-    return fn !== handler;
-  }) : [];
-  return events[type];
+  events[type] = (events[type] || []).filter(function (fn) {
+    return handler && fn !== handler;
+  });
 }
 
 function emit(type) {
-  for (var _len = arguments.length, value = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
-    value[_key - 1] = arguments[_key];
-  }
+  var data = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
 
-  console.log(value);
   if (window.webkit && window.webkit.messageHandlers) {
-    window.webkit.messageHandlers.nativebridge.postMessage({ type: type, value: value });
+    window.webkit.messageHandlers.nativebridgeiOS.postMessage({ type: type, data: data });
   } else if (window.nativebridgeAndroid) {
-    window.nativebridge.test(JSON.stringify({ type: type, value: value }));
+    window.nativebridgeAndroid.on(JSON.stringify({ type: type, data: data }));
   } else {
     console.log('no message handler context');
   }
 }
 
-if (typeof window !== 'undefined') {
-  window.addEventListener('webview-bridge', function (_ref) {
-    var details = _ref.details;
+function onNative(_ref) {
+  var _ref$details = _ref.details,
+      type = _ref$details.type,
+      data = _ref$details.data;
 
-    (events[details.type] || []).concat(events['*'] || []).map(function (handler) {
-      return handler(details.value);
-    });
+  (events[type] || []).forEach(function (handler) {
+    return handler(data);
   });
-  window.addEventListener('DOMContentLoaded', function () {
-    return emit('ready');
-  });
+}
+
+if (typeof window !== 'undefined') {
+  window.addEventListener('nativebridge', onNative);
 }
 
 module.exports = { on: on, off: off, emit: emit };

@@ -40,7 +40,7 @@
     <div aria-hidden="true">
     <h2>@nrk/nativebridge <!--version--></h2>
     <h3>Getting started</h3>
-    <p>nativebridge</p>
+    <p>Lightweight and efficient bridge between webview and native app</p>
     <h3>Use from <a href="https://npmjs.nrk.no/package/@nrk/nativebridge" target="_blank">npmjs.nrk.no</a></h3>
     <pre class="prettyprint">npm install @nrk/nativebridge --save</pre>
     <pre class="prettyprint">import nativebridge from '@nrk/nativebridge'</pre>
@@ -61,19 +61,49 @@
 
     <h2 id="web">Browser</h2>
     <p>
-      Document tabindex="0", role="button", aria-expanded="false", FOUT, and lacking polyfill for details.open, make react-bridge
+      Describe usage here
     </p>
+    <h3>Emit <span class="docs-pill">send to native</span></h3>
+    <pre class="prettyprint">nativebridge.emit('test', { foo: 'bar' })  // Emit 'test' event with data object <em>to native</em></pre>
     <h3>On <span class="docs-pill">receives from native</span></h3>
-    <pre class="prettyprint">nativebridge.on('test', (data) => {})  // Bind handler to 'test' event emitted <em>from native</em>
-nativebridge.on('*', (data) => {})     // Bind handler to all events emitted <em>from native</em></pre>
+    <pre class="prettyprint">nativebridge.on('test', (data) => {})      // Bind handler to 'test' event emitted <em>from native</em></pre>
   </div>
   <h3>Off</h3>
-  <pre class="prettyprint">nativebridge.off('test')               // Unbind all handlers for 'test' event
-nativebridge.off('test', (data) => {}) // Unbind specific handler for 'test' event</pre>
-  <h3>Emit <span class="docs-pill">send to native</span></h3>
-  <pre class="prettyprint">
-nativebridge.emit('test', {            // Emit 'test' event with data <em>to native</em>
-  foo: 'bar'
+  <pre class="prettyprint">nativebridge.off('test')                   // Unbind all handlers for 'test' event
+nativebridge.off('test', (data) => {})     // Unbind specific handler for 'test' event</pre>
+
+    <h2 id="andriod">Andriod</h2>
+    <p>
+      Describe usage here
+    </p>
+    <pre class="prettyprint">
+private class nativebridgeAndroid {
+  @JavascriptInterface
+
+  // Receives from webview
+  fun on(json: String){
+    Log.d("WebViewBridgeTest", "Called from web " + json)
+  }
+
+  // Send to webview
+  fun emit(type: String, data: Object) {
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+      var event = JSON.stringify({detail: {type, data}})
+      webview?.loadUrl("javascript:window.dispatchEvent(new CustomEvent('webview-bridge', ' + event + ' ))")
+    }
+  }
+}
+
+// Add interface to webview
+webView.addJavascriptInterface(new nativebridgeAndroid(), "interface");</pre>
+
+    <h2 id="ios">iOS</h2>
+    <p>
+      Describe usage here
+    </p>
+    <pre class="prettyprint">
+webView.evaluateJavaScript("window.dispatchEvent(new CustomEvent('webview-bridge', { detail: \(object) }))") {
+  (value, error) in
 })</pre>
 
     <h2 id="faq">FAQ</h2>
