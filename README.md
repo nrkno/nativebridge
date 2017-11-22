@@ -32,7 +32,7 @@ nativebridge.off('test', (data) => {})     // Unbind specific handler for 'test'
 ```
 
 
-### Usage
+### Installation
 
 ##### USE WITH NPM:
 ```
@@ -73,7 +73,7 @@ private class nativebridgeAndroid {
   fun emit(type: String, data: Object) {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
       var event = JSON.stringify({detail: {type, data}})
-      webview?.loadUrl("javascript:window.dispatchEvent(new CustomEvent('webview-bridge', ' + event + ' ))")
+      webview?.loadUrl("javascript:window.dispatchEvent(new CustomEvent('nativebridge', ' + event + ' ))")
     }
   }
 }
@@ -91,7 +91,7 @@ Describe usage here
 ##### EXAMPLE:
 
 ```
-webView.evaluateJavaScript("window.dispatchEvent(new CustomEvent('webview-bridge', { detail: \(object) }))") {
+webView.evaluateJavaScript("window.dispatchEvent(new CustomEvent('nativebridge', { detail: \(object) }))") {
   (value, error) in
 })
 ```
