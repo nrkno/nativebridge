@@ -17,11 +17,11 @@ function emit (type, data = {}) {
   } else if (window.nativebridgeAndroid) {
     window.nativebridgeAndroid.on(JSON.stringify({type, data}))
   } else {
-    console.log('no message handler context')
+    throw new Error('No native bridge defined')
   }
 }
 
-function onNative ({details: {type, data}}) {
+function onNative ({detail: {type, data}}) {
   (events[type] || []).forEach((handler) => handler(data))
 }
 

@@ -103,14 +103,14 @@ function emit(type) {
   } else if (window.nativebridgeAndroid) {
     window.nativebridgeAndroid.on(JSON.stringify({ type: type, data: data }));
   } else {
-    console.log('no message handler context');
+    throw new Error('No native bridge defined');
   }
 }
 
 function onNative(_ref) {
-  var _ref$details = _ref.details,
-      type = _ref$details.type,
-      data = _ref$details.data;
+  var _ref$detail = _ref.detail,
+      type = _ref$detail.type,
+      data = _ref$detail.data;
 
   (events[type] || []).forEach(function (handler) {
     return handler(data);
