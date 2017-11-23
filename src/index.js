@@ -14,8 +14,8 @@ function off (type, handler) {
 function emit (type, data = {}) {
   if (window.webkit && window.webkit.messageHandlers) {
     window.webkit.messageHandlers.nativebridgeiOS.postMessage({type, data})
-  } else if (window.nativebridgeAndroid) {
-    window.nativebridgeAndroid.on(JSON.stringify({type, data}))
+  } else if (window.NativeBridgeAndroid) {
+    window.NativeBridgeAndroid.send(JSON.stringify({type, data}))
   } else {
     throw new Error('No native bridge defined')
   }
