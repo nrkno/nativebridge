@@ -19,7 +19,7 @@ Describe usage here
 
 ##### EMIT - *send to native*:
 ```
-nativebridge.emit('test', { foo: 'bar' })  // Emit 'test' event with data object to native
+nativebridge.emit('test', { foo: 'bar' })  // Emit 'test' event with data (must be object) to native
 ```
 ##### ON - *receives from native*:
 ```
