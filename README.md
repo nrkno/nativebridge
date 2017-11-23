@@ -73,7 +73,7 @@ private class nativebridgeAndroid {
   fun emit(type: String, data: Object) {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
       var event = JSON.stringify({detail: {type, data}})
-      webview?.loadUrl("javascript:window.dispatchEvent(new CustomEvent('nativebridge', ' + event + ' ))")
+      webView?.loadUrl("javascript:window.dispatchEvent(new CustomEvent('nativebridge', ' + event + ' ))")
     }
   }
 }

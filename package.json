@@ -6,7 +6,7 @@
   "license": "MIT",
   "main": "dist/nativebridge.min.js",
   "scripts": {
-    "build": "rimraf dist/ && cpx 'src/test.*' dist/ && webpack",
+    "build": "rimraf dist/ && cpx 'src/test.html' dist/ && webpack",
     "prepare": "npm run build",
     "publish:patch": "npm version patch -m 'Release patch %s' && npm run push",
     "publish:minor": "npm version minor -m 'Release minor %s' && npm run push",

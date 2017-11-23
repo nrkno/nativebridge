@@ -5,7 +5,8 @@ module.exports = {
   context: path.resolve(__dirname, 'src'),
   entry: {
     'nativebridge': './index.js',
-    'nativebridge.min': './index.js'
+    'nativebridge.min': './index.js',
+    'test': './test.js'
   },
   output: {
     path: path.resolve(__dirname, 'dist'),
