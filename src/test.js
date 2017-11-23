@@ -1,12 +1,14 @@
-console.log('nativebridge:', window.nativebridge)
+var button = document.querySelector('button')
+var bridge = Object.assign({}, window.nativebridge)
+console.log('nativebridge:', bridge)
 
-window.nativebridge.on('test', function (payload) {
+bridge.on('test', function (payload) {
   var json = JSON.stringify(payload, null, '  ')
-  document.querySelector('form').insertAdjacentHTML('afterend', '<pre>From native: ' + json + '</pre>')
+  button.insertAdjacentHTML('afterend', '<pre>From native: ' + json + '</pre>')
 })
 
-document.querySelector('button').onclick = function (event) {
-  window.nativebridge.emit('test', {
+button.onclick = function (event) {
+  bridge.emit('test', {
     text: document.querySelector('input').value
   })
 }
