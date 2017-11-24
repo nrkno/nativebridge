@@ -90,11 +90,12 @@ bridge.on('test', function (payload) {
   button.insertAdjacentHTML('afterend', '<pre>From native: ' + json + '</pre>');
 });
 
-button.onclick = function (event) {
-  bridge.emit('test', {
-    text: document.querySelector('input').value
-  });
-};
+button.addEventListener('click', function (event) {
+  var data = document.getElementById('type');
+  var type = document.getElementById('data');
+
+  bridge.emit(type, JSON.parse(data));
+});
 
 /***/ })
 /******/ ]);
