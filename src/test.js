@@ -8,8 +8,9 @@ bridge.on('test', function (payload) {
 })
 
 button.addEventListener('click', function (event) {
-  var data = document.getElementById('type')
-  var type = document.getElementById('data')
+  var type = document.getElementById('data').textContent.trim()
+  var data = document.getElementById('type').textContent.trim()
+  var json = JSON.parse('{' + data + '}')
 
-  bridge.emit(type, JSON.parse(data))
+  bridge.emit(type, json)
 })
