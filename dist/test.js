@@ -91,8 +91,8 @@ bridge.on('test', function (payload) {
 });
 
 button.addEventListener('click', function (event) {
-  var type = document.getElementById('data').textContent.trim();
-  var data = document.getElementById('type').textContent.trim();
+  var type = document.getElementById('type').textContent.trim();
+  var data = document.getElementById('data').textContent.trim();
   var json = JSON.parse('{' + data + '}');
 
   bridge.emit(type, json);
