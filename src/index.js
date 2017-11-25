@@ -25,8 +25,16 @@ function onNative ({detail: {type, data}}) {
   (events[type] || []).forEach((handler) => handler(data))
 }
 
-if (typeof window !== 'undefined') {
+function setupNativeLink () {
   window.addEventListener('nativebridge', onNative)
 }
 
-module.exports = { on, off, emit }
+function teardownNativeLink () {
+  window.removeEventListener('nativebridge', onNative)
+}
+
+if (typeof window !== 'undefined') {
+  setupNativeLink()
+}
+
+module.exports = { on, off, emit, setupNativeLink, teardownNativeLink }
