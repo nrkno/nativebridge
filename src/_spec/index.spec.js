@@ -1,4 +1,4 @@
-const {on, off, emit, setupNativeLink, teardownNativeLink} = require('..')
+const {on, off, emit, setupNativeLink, destroy} = require('..')
 const expect = require('expect.js')
 const sinon = require('sinon')
 const {JSDOM} = require('jsdom')
@@ -69,6 +69,44 @@ const testSuite = (nativeType) => {
     expect(spy.calledWith([PONG, {test: PONG}])).to.equal(true)
     off('array', spy)
   })
+
+  it('should trigger multiple subscribers listening on the same topic', () => {
+    const spy1 = sinon.spy()
+    const spy2 = sinon.spy()
+    on('string', spy1)
+    on('string', spy2)
+    emit('string', PING)
+    expect(spy1.called).to.equal(true)
+    expect(spy2.called).to.equal(true)
+    expect(spy1.calledWith(PONG)).to.equal(true)
+    expect(spy2.calledWith(PONG)).to.equal(true)
+    off('string', spy1)
+    off('string', spy2)
+  })
+
+  it('should unsubscribe when using off with handler as arg', () => {
+    const spy1 = sinon.spy()
+    const spy2 = sinon.spy()
+    on('string', spy1)
+    on('string', spy2)
+    off('string', spy2)
+    emit('string', PING)
+    expect(spy1.called).to.equal(true)
+    expect(spy2.called).to.equal(false)
+    expect(spy1.calledWith(PONG)).to.equal(true)
+    off('string', spy1)
+  })
+
+  it('should unsubscribe when using off', () => {
+    const spy1 = sinon.spy()
+    const spy2 = sinon.spy()
+    on('string', spy1)
+    on('string', spy2)
+    off('string')
+    emit('string', PING)
+    expect(spy1.called).to.equal(false)
+    expect(spy2.called).to.equal(false)
+  })
 }
 
 const mockDom = () => {
@@ -79,7 +117,7 @@ const mockDom = () => {
 }
 
 const teardownDom = () => {
-  teardownNativeLink()
+  destroy()
   delete global.window
   delete global.document
 }

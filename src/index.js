@@ -29,7 +29,13 @@ function setupNativeLink () {
   window.addEventListener('nativebridge', onNative)
 }
 
-function teardownNativeLink () {
+function destroy () {
+  Object.keys(events).forEach((type) => {
+    Object.keys(events[type]).forEach((handler) => {
+      delete events[type][handler]
+    })
+    delete events[type]
+  })
   window.removeEventListener('nativebridge', onNative)
 }
 
@@ -37,4 +43,10 @@ if (typeof window !== 'undefined') {
   setupNativeLink()
 }
 
-module.exports = { on, off, emit, setupNativeLink, teardownNativeLink }
+module.exports = {
+  on,
+  off,
+  emit,
+  setupNativeLink,
+  destroy
+}
