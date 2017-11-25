@@ -1,7 +1,13 @@
-const {on, off, emit, setupNativeLink, destroy} = require('..')
-const expect = require('expect.js')
-const sinon = require('sinon')
-const {JSDOM} = require('jsdom')
+import {
+  on,
+  off,
+  emit,
+  setupNativeLink,
+  destroy
+} from '..'
+import expect from 'expect.js'
+import sinon from 'sinon'
+import {JSDOM} from 'jsdom'
 
 const PING = 'ping'
 const PONG = 'pong'

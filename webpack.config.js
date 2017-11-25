@@ -20,8 +20,7 @@ module.exports = {
       test: /\.js$/,
       exclude: [/node_modules(?!\/webpack-dev-server)/], // See https://github.com/webpack/webpack-dev-server/issues/1101#issuecomment-331651230
       use: [{
-        loader: 'babel-loader',
-        options: { presets: ['es2015'] }
+        loader: 'babel-loader'
       }]
     }]
   },

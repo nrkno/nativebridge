@@ -80,6 +80,14 @@ return /******/ (function(modules) { // webpackBootstrap
 "use strict";
 
 
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.on = on;
+exports.off = off;
+exports.emit = emit;
+exports.setupNativeLink = setupNativeLink;
+exports.destroy = destroy;
 var events = {};
 
 function on(type, handler) {
@@ -117,11 +125,23 @@ function onNative(_ref) {
   });
 }
 
-if (typeof window !== 'undefined') {
+function setupNativeLink() {
   window.addEventListener('nativebridge', onNative);
 }
 
-module.exports = { on: on, off: off, emit: emit };
+function destroy() {
+  Object.keys(events).forEach(function (type) {
+    Object.keys(events[type]).forEach(function (handler) {
+      delete events[type][handler];
+    });
+    delete events[type];
+  });
+  window.removeEventListener('nativebridge', onNative);
+}
+
+if (typeof window !== 'undefined') {
+  setupNativeLink();
+}
 
 /***/ })
 /******/ ]);

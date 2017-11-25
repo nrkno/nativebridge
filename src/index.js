@@ -1,17 +1,17 @@
 const events = {}
 
-function on (type, handler) {
+export function on (type, handler) {
   if (typeof handler !== 'function') {
     throw new Error('Handler must be of type function')
   }
   (events[type] = events[type] || []).push(handler)
 }
 
-function off (type, handler) {
+export function off (type, handler) {
   events[type] = (events[type] || []).filter((fn) => handler && fn !== handler)
 }
 
-function emit (type, data = {}) {
+export function emit (type, data = {}) {
   if (window.webkit && window.webkit.messageHandlers) {
     window.webkit.messageHandlers.nativebridgeiOS.postMessage({type, data})
   } else if (window.NativeBridgeAndroid) {
@@ -25,11 +25,11 @@ function onNative ({detail: {type, data}}) {
   (events[type] || []).forEach((handler) => handler(data))
 }
 
-function setupNativeLink () {
+export function setupNativeLink () {
   window.addEventListener('nativebridge', onNative)
 }
 
-function destroy () {
+export function destroy () {
   Object.keys(events).forEach((type) => {
     Object.keys(events[type]).forEach((handler) => {
       delete events[type][handler]
@@ -41,12 +41,4 @@ function destroy () {
 
 if (typeof window !== 'undefined') {
   setupNativeLink()
-}
-
-module.exports = {
-  on,
-  off,
-  emit,
-  setupNativeLink,
-  destroy
 }
