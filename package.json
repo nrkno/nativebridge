@@ -14,7 +14,7 @@
     "push": "git push && git push --tags && npm publish",
     "start": "NODE_ENV=development webpack-dev-server",
     "lint": "standard",
-    "test": "npm run lint && mocha --require src/**/*.spec.js*",
+    "test": "npm run lint && mocha src/**/*.spec.js*",
     "test:watch": "mocha --watch src/**/*.spec.js*",
     "static-publish": "static-publish publish --directory ./dist --package ./package.json --verbose --latest"
   },
