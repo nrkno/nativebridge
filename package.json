@@ -4,6 +4,7 @@
   "author": "NRK <opensource@nrk.no> (https://www.nrk.no/)",
   "version": "1.0.0",
   "license": "MIT",
+  "private": true,
   "main": "dist/nativebridge.min.js",
   "scripts": {
     "build": "rimraf dist/ && cpx 'src/test.html' dist/ && webpack",
@@ -14,7 +15,7 @@
     "push": "git push && git push --tags && npm publish",
     "start": "NODE_ENV=development webpack-dev-server",
     "lint": "standard",
-    "test": "npm run lint && mocha src/**/*.spec.js*",
+    "test": "npm run lint && mocha --require bsrc/**/*.spec.js*",
     "test:watch": "mocha --watch src/**/*.spec.js*",
     "static-publish": "static-publish publish --directory ./dist --package ./package.json --verbose --latest"
   },
