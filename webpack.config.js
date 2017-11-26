@@ -2,6 +2,7 @@ const path = require('path')
 const webpack = require('webpack')
 
 module.exports = {
+  devtool: 'source-map',
   context: path.resolve(__dirname, 'src'),
   entry: {
     'nativebridge': './index.js',
@@ -31,7 +32,6 @@ module.exports = {
     inline: false                               // Must use for CSP
   },
   plugins: [
-    new webpack.optimize.ModuleConcatenationPlugin(),
     new webpack.optimize.UglifyJsPlugin({
       include: /\.min\.js$/,
       sourceMap: true

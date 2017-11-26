@@ -146,3 +146,4 @@ if (typeof window !== 'undefined') {
 /***/ })
 /******/ ]);
 });
+//# sourceMappingURL=nativebridge.js.map
