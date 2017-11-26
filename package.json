@@ -4,7 +4,6 @@
   "author": "NRK <opensource@nrk.no> (https://www.nrk.no/)",
   "version": "1.0.0",
   "license": "MIT",
-  "private": true,
   "main": "dist/nativebridge.min.js",
   "scripts": {
     "build": "rimraf dist/ && cpx 'src/test.html' dist/ && webpack",
