@@ -85,6 +85,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.on = on;
 exports.off = off;
+exports.once = once;
 exports.emit = emit;
 exports.setupNativeLink = setupNativeLink;
 exports.destroy = destroy;
@@ -103,13 +104,20 @@ function off(type, handler) {
   });
 }
 
+function once(type, handler) {
+  var newHandler = function newHandler() {
+    off(type, newHandler);
+    handler.apply(undefined, arguments);
+  };
+  on(type, newHandler);
+}
+
 function emit(type) {
   var data = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
 
   if (window.webkit && window.webkit.messageHandlers) {
     window.webkit.messageHandlers.nativebridgeiOS.postMessage({ type: type, data: data });
   } else if (window.NativeBridgeAndroid) {
-    console.log('emit', type, data);
     window.NativeBridgeAndroid.send(JSON.stringify({ type: type, data: data }));
   } else {
     throw new Error('No native bridge defined');
