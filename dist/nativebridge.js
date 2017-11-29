@@ -109,6 +109,7 @@ function emit(type) {
   if (window.webkit && window.webkit.messageHandlers) {
     window.webkit.messageHandlers.nativebridgeiOS.postMessage({ type: type, data: data });
   } else if (window.NativeBridgeAndroid) {
+    console.log('emit', type, data);
     window.NativeBridgeAndroid.send(JSON.stringify({ type: type, data: data }));
   } else {
     throw new Error('No native bridge defined');

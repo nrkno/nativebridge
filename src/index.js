@@ -11,6 +11,14 @@ export function off (type, handler) {
   events[type] = (events[type] || []).filter((fn) => handler && fn !== handler)
 }
 
+export function once (type, handler) {
+  const newHandler = function (...args) {
+    off(type, newHandler)
+    handler(...args)
+  }
+  on(type, newHandler)
+}
+
 export function emit (type, data = {}) {
   if (window.webkit && window.webkit.messageHandlers) {
     window.webkit.messageHandlers.nativebridgeiOS.postMessage({type, data})

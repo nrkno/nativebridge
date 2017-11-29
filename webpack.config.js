@@ -1,5 +1,8 @@
 const path = require('path')
 const webpack = require('webpack')
+const yargs = require('yargs').argv
+
+const watch = yargs.watch
 
 module.exports = {
   devtool: 'source-map',
@@ -9,6 +12,7 @@ module.exports = {
     'nativebridge.min': './index.js',
     'test': './test.js'
   },
+  watch,
   output: {
     path: path.resolve(__dirname, 'dist'),
     publicPath: '/',

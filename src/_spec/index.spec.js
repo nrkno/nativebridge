@@ -1,5 +1,6 @@
 import {
   on,
+  once,
   off,
   emit,
   setupNativeLink,
@@ -112,6 +113,14 @@ const testSuite = (nativeType) => {
     emit('string', PING)
     expect(spy1.called).to.equal(false)
     expect(spy2.called).to.equal(false)
+  })
+
+  it('should unsubscribe automatically after first emit, when using once', () => {
+    const spy1 = sinon.spy()
+    once('string', spy1)
+    emit('string', PING)
+    emit('string', PING)
+    expect(spy1.callCount).to.equal(1)
   })
 }
 
