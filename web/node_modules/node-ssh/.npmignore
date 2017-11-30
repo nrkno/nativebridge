@@ -1,0 +1,7 @@
+.idea/
+node_modules
+spec/
+src/
+*.DS_Store
+decls
+.flowconfig
