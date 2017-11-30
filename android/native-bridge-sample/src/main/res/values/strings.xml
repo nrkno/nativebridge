@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">WebViewBridgeTest</string>
+    <string name="native_button">Native Button</string>
+</resources>

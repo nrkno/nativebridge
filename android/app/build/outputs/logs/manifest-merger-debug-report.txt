@@ -1,0 +1,106 @@
+-- Merging decision tree log ---
+manifest
+ADDED from /Users/hanspeide/Development/clients/nrk/nativebridge-android/app/src/main/AndroidManifest.xml:2:1-23:12
+INJECTED from /Users/hanspeide/Development/clients/nrk/nativebridge-android/app/src/main/AndroidManifest.xml:2:1-23:12
+INJECTED from /Users/hanspeide/Development/clients/nrk/nativebridge-android/app/src/main/AndroidManifest.xml:2:1-23:12
+INJECTED from /Users/hanspeide/Development/clients/nrk/nativebridge-android/app/src/main/AndroidManifest.xml:2:1-23:12
+MERGED from [com.android.support:appcompat-v7:27.0.1] /Users/hanspeide/.gradle/caches/transforms-1/files-1.1/appcompat-v7-27.0.1.aar/0fda71fd2b4236a7ce914135ad611d2a/AndroidManifest.xml:17:1-22:12
+MERGED from [com.android.support.constraint:constraint-layout:1.0.2] /Users/hanspeide/.gradle/caches/transforms-1/files-1.1/constraint-layout-1.0.2.aar/ee0ba9fedc38a428ae5b67243823e0f5/AndroidManifest.xml:2:1-11:12
+MERGED from [com.android.support:support-fragment:27.0.1] /Users/hanspeide/.gradle/caches/transforms-1/files-1.1/support-fragment-27.0.1.aar/a2a0086eb03cd3601a0adda16b668143/AndroidManifest.xml:17:1-22:12
+MERGED from [com.android.support:support-core-utils:27.0.1] /Users/hanspeide/.gradle/caches/transforms-1/files-1.1/support-core-utils-27.0.1.aar/52ad6a453071acb21129a86ca7b58c33/AndroidManifest.xml:17:1-22:12
+MERGED from [com.android.support:animated-vector-drawable:27.0.1] /Users/hanspeide/.gradle/caches/transforms-1/files-1.1/animated-vector-drawable-27.0.1.aar/a532392e0ec7407852f2de129cf035db/AndroidManifest.xml:17:1-22:12
+MERGED from [com.android.support:support-vector-drawable:27.0.1] /Users/hanspeide/.gradle/caches/transforms-1/files-1.1/support-vector-drawable-27.0.1.aar/772a3360e5c6a08e096a5daa52bbf29b/AndroidManifest.xml:17:1-22:12
+MERGED from [com.android.support:support-core-ui:27.0.1] /Users/hanspeide/.gradle/caches/transforms-1/files-1.1/support-core-ui-27.0.1.aar/4a1401ad017d8cdb41c51f3ce5745adc/AndroidManifest.xml:17:1-22:12
+MERGED from [com.android.support:support-compat:27.0.1] /Users/hanspeide/.gradle/caches/transforms-1/files-1.1/support-compat-27.0.1.aar/79d69ed46706f8cbf7d0b00e35155343/AndroidManifest.xml:17:1-22:12
+MERGED from [android.arch.lifecycle:runtime:1.0.0] /Users/hanspeide/.gradle/caches/transforms-1/files-1.1/runtime-1.0.0.aar/7f06f5a30e91ec73fb296cac9d367c98/AndroidManifest.xml:17:1-30:12
+INJECTED from /Users/hanspeide/Development/clients/nrk/nativebridge-android/app/src/main/AndroidManifest.xml:2:1-23:12
+INJECTED from /Users/hanspeide/Development/clients/nrk/nativebridge-android/app/src/main/AndroidManifest.xml:2:1-23:12
+INJECTED from /Users/hanspeide/Development/clients/nrk/nativebridge-android/app/src/main/AndroidManifest.xml:2:1-23:12
+	package
+		ADDED from /Users/hanspeide/Development/clients/nrk/nativebridge-android/app/src/main/AndroidManifest.xml:3:5-34
+		INJECTED from /Users/hanspeide/Development/clients/nrk/nativebridge-android/app/src/main/AndroidManifest.xml
+		INJECTED from /Users/hanspeide/Development/clients/nrk/nativebridge-android/app/src/main/AndroidManifest.xml
+	android:versionName
+		INJECTED from /Users/hanspeide/Development/clients/nrk/nativebridge-android/app/src/main/AndroidManifest.xml
+		ADDED from /Users/hanspeide/Development/clients/nrk/nativebridge-android/app/src/main/AndroidManifest.xml:2:1-23:12
+		INJECTED from /Users/hanspeide/Development/clients/nrk/nativebridge-android/app/src/main/AndroidManifest.xml
+	android:versionCode
+		INJECTED from /Users/hanspeide/Development/clients/nrk/nativebridge-android/app/src/main/AndroidManifest.xml
+		ADDED from /Users/hanspeide/Development/clients/nrk/nativebridge-android/app/src/main/AndroidManifest.xml:2:1-23:12
+		INJECTED from /Users/hanspeide/Development/clients/nrk/nativebridge-android/app/src/main/AndroidManifest.xml
+	xmlns:android
+		ADDED from /Users/hanspeide/Development/clients/nrk/nativebridge-android/app/src/main/AndroidManifest.xml:2:11-69
+uses-permission#android.permission.INTERNET
+ADDED from /Users/hanspeide/Development/clients/nrk/nativebridge-android/app/src/main/AndroidManifest.xml:5:5-67
+	android:name
+		ADDED from /Users/hanspeide/Development/clients/nrk/nativebridge-android/app/src/main/AndroidManifest.xml:5:22-64
+application
+ADDED from /Users/hanspeide/Development/clients/nrk/nativebridge-android/app/src/main/AndroidManifest.xml:7:5-21:19
+MERGED from [com.android.support.constraint:constraint-layout:1.0.2] /Users/hanspeide/.gradle/caches/transforms-1/files-1.1/constraint-layout-1.0.2.aar/ee0ba9fedc38a428ae5b67243823e0f5/AndroidManifest.xml:9:5-20
+MERGED from [com.android.support.constraint:constraint-layout:1.0.2] /Users/hanspeide/.gradle/caches/transforms-1/files-1.1/constraint-layout-1.0.2.aar/ee0ba9fedc38a428ae5b67243823e0f5/AndroidManifest.xml:9:5-20
+MERGED from [android.arch.lifecycle:runtime:1.0.0] /Users/hanspeide/.gradle/caches/transforms-1/files-1.1/runtime-1.0.0.aar/7f06f5a30e91ec73fb296cac9d367c98/AndroidManifest.xml:24:5-28:19
+MERGED from [android.arch.lifecycle:runtime:1.0.0] /Users/hanspeide/.gradle/caches/transforms-1/files-1.1/runtime-1.0.0.aar/7f06f5a30e91ec73fb296cac9d367c98/AndroidManifest.xml:24:5-28:19
+	android:supportsRtl
+		ADDED from /Users/hanspeide/Development/clients/nrk/nativebridge-android/app/src/main/AndroidManifest.xml:12:9-35
+	android:label
+		ADDED from /Users/hanspeide/Development/clients/nrk/nativebridge-android/app/src/main/AndroidManifest.xml:10:9-41
+	android:roundIcon
+		ADDED from /Users/hanspeide/Development/clients/nrk/nativebridge-android/app/src/main/AndroidManifest.xml:11:9-54
+	android:icon
+		ADDED from /Users/hanspeide/Development/clients/nrk/nativebridge-android/app/src/main/AndroidManifest.xml:9:9-43
+	android:allowBackup
+		ADDED from /Users/hanspeide/Development/clients/nrk/nativebridge-android/app/src/main/AndroidManifest.xml:8:9-35
+	android:theme
+		ADDED from /Users/hanspeide/Development/clients/nrk/nativebridge-android/app/src/main/AndroidManifest.xml:13:9-40
+activity#no.nrk.nativebridge.MainActivity
+ADDED from /Users/hanspeide/Development/clients/nrk/nativebridge-android/app/src/main/AndroidManifest.xml:14:9-20:20
+	android:name
+		ADDED from /Users/hanspeide/Development/clients/nrk/nativebridge-android/app/src/main/AndroidManifest.xml:14:19-66
+intent-filter#android.intent.action.MAIN+android.intent.category.LAUNCHER
+ADDED from /Users/hanspeide/Development/clients/nrk/nativebridge-android/app/src/main/AndroidManifest.xml:15:13-19:29
+action#android.intent.action.MAIN
+ADDED from /Users/hanspeide/Development/clients/nrk/nativebridge-android/app/src/main/AndroidManifest.xml:16:17-69
+	android:name
+		ADDED from /Users/hanspeide/Development/clients/nrk/nativebridge-android/app/src/main/AndroidManifest.xml:16:25-66
+category#android.intent.category.LAUNCHER
+ADDED from /Users/hanspeide/Development/clients/nrk/nativebridge-android/app/src/main/AndroidManifest.xml:18:17-77
+	android:name
+		ADDED from /Users/hanspeide/Development/clients/nrk/nativebridge-android/app/src/main/AndroidManifest.xml:18:27-74
+uses-sdk
+INJECTED from /Users/hanspeide/Development/clients/nrk/nativebridge-android/app/src/main/AndroidManifest.xml reason: use-sdk injection requested
+INJECTED from /Users/hanspeide/Development/clients/nrk/nativebridge-android/app/src/main/AndroidManifest.xml
+INJECTED from /Users/hanspeide/Development/clients/nrk/nativebridge-android/app/src/main/AndroidManifest.xml
+MERGED from [com.android.support:appcompat-v7:27.0.1] /Users/hanspeide/.gradle/caches/transforms-1/files-1.1/appcompat-v7-27.0.1.aar/0fda71fd2b4236a7ce914135ad611d2a/AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:appcompat-v7:27.0.1] /Users/hanspeide/.gradle/caches/transforms-1/files-1.1/appcompat-v7-27.0.1.aar/0fda71fd2b4236a7ce914135ad611d2a/AndroidManifest.xml:20:5-44
+MERGED from [com.android.support.constraint:constraint-layout:1.0.2] /Users/hanspeide/.gradle/caches/transforms-1/files-1.1/constraint-layout-1.0.2.aar/ee0ba9fedc38a428ae5b67243823e0f5/AndroidManifest.xml:5:5-7:41
+MERGED from [com.android.support.constraint:constraint-layout:1.0.2] /Users/hanspeide/.gradle/caches/transforms-1/files-1.1/constraint-layout-1.0.2.aar/ee0ba9fedc38a428ae5b67243823e0f5/AndroidManifest.xml:5:5-7:41
+MERGED from [com.android.support:support-fragment:27.0.1] /Users/hanspeide/.gradle/caches/transforms-1/files-1.1/support-fragment-27.0.1.aar/a2a0086eb03cd3601a0adda16b668143/AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:support-fragment:27.0.1] /Users/hanspeide/.gradle/caches/transforms-1/files-1.1/support-fragment-27.0.1.aar/a2a0086eb03cd3601a0adda16b668143/AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:support-core-utils:27.0.1] /Users/hanspeide/.gradle/caches/transforms-1/files-1.1/support-core-utils-27.0.1.aar/52ad6a453071acb21129a86ca7b58c33/AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:support-core-utils:27.0.1] /Users/hanspeide/.gradle/caches/transforms-1/files-1.1/support-core-utils-27.0.1.aar/52ad6a453071acb21129a86ca7b58c33/AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:animated-vector-drawable:27.0.1] /Users/hanspeide/.gradle/caches/transforms-1/files-1.1/animated-vector-drawable-27.0.1.aar/a532392e0ec7407852f2de129cf035db/AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:animated-vector-drawable:27.0.1] /Users/hanspeide/.gradle/caches/transforms-1/files-1.1/animated-vector-drawable-27.0.1.aar/a532392e0ec7407852f2de129cf035db/AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:support-vector-drawable:27.0.1] /Users/hanspeide/.gradle/caches/transforms-1/files-1.1/support-vector-drawable-27.0.1.aar/772a3360e5c6a08e096a5daa52bbf29b/AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:support-vector-drawable:27.0.1] /Users/hanspeide/.gradle/caches/transforms-1/files-1.1/support-vector-drawable-27.0.1.aar/772a3360e5c6a08e096a5daa52bbf29b/AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:support-core-ui:27.0.1] /Users/hanspeide/.gradle/caches/transforms-1/files-1.1/support-core-ui-27.0.1.aar/4a1401ad017d8cdb41c51f3ce5745adc/AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:support-core-ui:27.0.1] /Users/hanspeide/.gradle/caches/transforms-1/files-1.1/support-core-ui-27.0.1.aar/4a1401ad017d8cdb41c51f3ce5745adc/AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:support-compat:27.0.1] /Users/hanspeide/.gradle/caches/transforms-1/files-1.1/support-compat-27.0.1.aar/79d69ed46706f8cbf7d0b00e35155343/AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:support-compat:27.0.1] /Users/hanspeide/.gradle/caches/transforms-1/files-1.1/support-compat-27.0.1.aar/79d69ed46706f8cbf7d0b00e35155343/AndroidManifest.xml:20:5-44
+MERGED from [android.arch.lifecycle:runtime:1.0.0] /Users/hanspeide/.gradle/caches/transforms-1/files-1.1/runtime-1.0.0.aar/7f06f5a30e91ec73fb296cac9d367c98/AndroidManifest.xml:20:5-22:41
+MERGED from [android.arch.lifecycle:runtime:1.0.0] /Users/hanspeide/.gradle/caches/transforms-1/files-1.1/runtime-1.0.0.aar/7f06f5a30e91ec73fb296cac9d367c98/AndroidManifest.xml:20:5-22:41
+INJECTED from /Users/hanspeide/Development/clients/nrk/nativebridge-android/app/src/main/AndroidManifest.xml
+INJECTED from /Users/hanspeide/Development/clients/nrk/nativebridge-android/app/src/main/AndroidManifest.xml
+	android:targetSdkVersion
+		INJECTED from /Users/hanspeide/Development/clients/nrk/nativebridge-android/app/src/main/AndroidManifest.xml
+		ADDED from /Users/hanspeide/Development/clients/nrk/nativebridge-android/app/src/main/AndroidManifest.xml
+		INJECTED from /Users/hanspeide/Development/clients/nrk/nativebridge-android/app/src/main/AndroidManifest.xml
+	android:minSdkVersion
+		INJECTED from /Users/hanspeide/Development/clients/nrk/nativebridge-android/app/src/main/AndroidManifest.xml
+		ADDED from /Users/hanspeide/Development/clients/nrk/nativebridge-android/app/src/main/AndroidManifest.xml
+		INJECTED from /Users/hanspeide/Development/clients/nrk/nativebridge-android/app/src/main/AndroidManifest.xml
+meta-data#android.arch.lifecycle.VERSION
+ADDED from [android.arch.lifecycle:runtime:1.0.0] /Users/hanspeide/.gradle/caches/transforms-1/files-1.1/runtime-1.0.0.aar/7f06f5a30e91ec73fb296cac9d367c98/AndroidManifest.xml:25:9-27:47
+	android:value
+		ADDED from [android.arch.lifecycle:runtime:1.0.0] /Users/hanspeide/.gradle/caches/transforms-1/files-1.1/runtime-1.0.0.aar/7f06f5a30e91ec73fb296cac9d367c98/AndroidManifest.xml:27:13-44
+	android:name
+		ADDED from [android.arch.lifecycle:runtime:1.0.0] /Users/hanspeide/.gradle/caches/transforms-1/files-1.1/runtime-1.0.0.aar/7f06f5a30e91ec73fb296cac9d367c98/AndroidManifest.xml:26:13-58
