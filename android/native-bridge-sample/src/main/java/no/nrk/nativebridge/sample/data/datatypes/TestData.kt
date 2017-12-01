@@ -1,4 +1,4 @@
-package no.nrk.nativebridge.sample.data;
+package no.nrk.nativebridge.sample.data.datatypes;
 
 import no.nrk.nativebridge.DataType
 
