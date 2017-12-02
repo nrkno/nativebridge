@@ -34,7 +34,7 @@ nativebridge.off('test', (data) => {})      // Unbind specific handler for 'test
 
 ##### RPC:
 ```js
-// Auto-bind handlers (once/off) to complete an RPC-call to native
+// Auto-bind handlers (once/emit) to complete an RPC-call to native
 nativeBridge.rpc({                          
   type: 'test',                             // using 'test' as event
   data: {},                                 // with data (args)

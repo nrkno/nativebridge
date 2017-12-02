@@ -83,10 +83,14 @@ return /******/ (function(modules) { // webpackBootstrap
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
 exports.on = on;
 exports.off = off;
 exports.once = once;
 exports.emit = emit;
+exports.validateInput = validateInput;
 exports.rpc = rpc;
 exports.setupNativeLink = setupNativeLink;
 exports.destroy = destroy;
@@ -126,15 +130,41 @@ function emit(type) {
   }
 }
 
-function rpc(_ref) {
+function validateInput(_ref) {
   var type = _ref.type,
       data = _ref.data,
       resolve = _ref.resolve,
       reject = _ref.reject,
-      _ref$timeout = _ref.timeout,
-      timeout = _ref$timeout === undefined ? DEFAULT_TIMEOUT : _ref$timeout;
+      timeout = _ref.timeout;
+
+  if (typeof type === 'undefined' || typeof type !== 'string') {
+    throw TypeError('type argument must be a String');
+  }
+  if (typeof data === 'undefined' || data === null || (typeof data === 'undefined' ? 'undefined' : _typeof(data)) !== 'object') {
+    throw TypeError('data argument must be an Object');
+  }
+  if (typeof resolve !== 'function') {
+    throw new TypeError('resolve must be a function');
+  }
+  if (typeof reject !== 'function') {
+    throw new TypeError('resolve must be a function');
+  }
+  if (typeof timeout !== 'number') {
+    throw new TypeError('timeout must be a number');
+  }
+  return true;
+}
+
+function rpc(_ref2) {
+  var type = _ref2.type,
+      data = _ref2.data,
+      resolve = _ref2.resolve,
+      reject = _ref2.reject,
+      _ref2$timeout = _ref2.timeout,
+      timeout = _ref2$timeout === undefined ? DEFAULT_TIMEOUT : _ref2$timeout;
 
   try {
+    validateInput({ type: type, resolve: resolve, reject: reject, data: data, timeout: timeout });
     var timedout = false;
     var timer = setTimeout(function () {
       timedout = true;
@@ -154,10 +184,10 @@ function rpc(_ref) {
     reject(e);
   }
 }
-function onNative(_ref2) {
-  var _ref2$detail = _ref2.detail,
-      type = _ref2$detail.type,
-      data = _ref2$detail.data;
+function onNative(_ref3) {
+  var _ref3$detail = _ref3.detail,
+      type = _ref3$detail.type,
+      data = _ref3$detail.data;
 
   (events[type] || []).forEach(function (handler) {
     return handler(data);
