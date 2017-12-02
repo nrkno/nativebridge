@@ -18,19 +18,31 @@ iOS 10.2+ | Android 4.4.4+
 Describe usage here
 
 ##### EMIT - *send to native*:
-```
+```js
 nativebridge.emit('test', { foo: 'bar' })  // Emit 'test' event with data (must be object) to native
 ```
-##### ON - *receives from native*:
-```
-nativebridge.on('test', (data) => {})      // Bind handler to 'test' event emitted from native
+##### ON/ONCE - *receives from native*:
+```js
+nativebridge.on('test', (data) => {})       // Bind handler to 'test' event emitted from native
+nativebridge.once('test', (data) => {})     // Bind handler to 'test' (once) event emitted from native
 ```
 ##### OFF:
-```
-nativebridge.off('test')                   // Unbind all handlers for 'test' event
-nativebridge.off('test', (data) => {})     // Unbind specific handler for 'test' event
+```js
+nativebridge.off('test')                    // Unbind all handlers for 'test' event
+nativebridge.off('test', (data) => {})      // Unbind specific handler for 'test' event
 ```
 
+##### RPC:
+```js
+// Auto-bind handlers (once/off) to complete an RPC-call to native
+nativeBridge.rpc({                          
+  type: 'test',                             // using 'test' as event
+  data: {},                                 // with data (args)
+  resolve: (data) => {},                    // using callback on success
+  reject: (err) => {},                      // or rejection on error
+  timeout: 1000                             // with a timeout threshold
+})
+```
 
 ### Installation
 

@@ -87,9 +87,11 @@ exports.on = on;
 exports.off = off;
 exports.once = once;
 exports.emit = emit;
+exports.rpc = rpc;
 exports.setupNativeLink = setupNativeLink;
 exports.destroy = destroy;
 var events = {};
+var DEFAULT_TIMEOUT = 1000;
 
 function on(type, handler) {
   if (typeof handler !== 'function') {
@@ -124,10 +126,38 @@ function emit(type) {
   }
 }
 
-function onNative(_ref) {
-  var _ref$detail = _ref.detail,
-      type = _ref$detail.type,
-      data = _ref$detail.data;
+function rpc(_ref) {
+  var type = _ref.type,
+      data = _ref.data,
+      resolve = _ref.resolve,
+      reject = _ref.reject,
+      _ref$timeout = _ref.timeout,
+      timeout = _ref$timeout === undefined ? DEFAULT_TIMEOUT : _ref$timeout;
+
+  try {
+    var timedout = false;
+    var timer = setTimeout(function () {
+      timedout = true;
+      reject(new Error('RPC for ' + type + ' using ' + data + ' timed out after ' + timeout + 'ms'));
+    }, timeout);
+    var done = function done(args) {
+      clearTimeout(timer);
+      if (args.errors) {
+        reject(new Error(args.errors));
+      } else if (!timedout) {
+        resolve(args);
+      }
+    };
+    once(type, done);
+    emit(type, data);
+  } catch (e) {
+    reject(e);
+  }
+}
+function onNative(_ref2) {
+  var _ref2$detail = _ref2.detail,
+      type = _ref2$detail.type,
+      data = _ref2$detail.data;
 
   (events[type] || []).forEach(function (handler) {
     return handler(data);

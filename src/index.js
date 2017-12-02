@@ -1,4 +1,5 @@
 const events = {}
+const DEFAULT_TIMEOUT = 1000
 
 export function on (type, handler) {
   if (typeof handler !== 'function') {
@@ -29,6 +30,47 @@ export function emit (type, data = {}) {
   }
 }
 
+export function validateInput ({type, data, resolve, reject, timeout}) {
+  if (typeof type === 'undefined' || typeof type !== 'string') {
+    throw TypeError('type argument must be a String')
+  }
+  if (typeof data === 'undefined' || data === null || typeof data !== 'object') {
+    throw TypeError('data argument must be an Object')
+  }
+  if (typeof resolve !== 'function') {
+    throw new TypeError('resolve must be a function')
+  }
+  if (typeof reject !== 'function') {
+    throw new TypeError('resolve must be a function')
+  }
+  if (typeof timeout !== 'number') {
+    throw new TypeError('timeout must be a number')
+  }
+  return true
+}
+
+export function rpc ({type, data, resolve, reject, timeout = DEFAULT_TIMEOUT}) {
+  try {
+    validateInput({type, resolve, reject, data, timeout})
+    let timedout = false
+    const timer = setTimeout(function () {
+      timedout = true
+      reject(new Error(`RPC for ${type} using ${data} timed out after ${timeout}ms`))
+    }, timeout)
+    const done = (args) => {
+      clearTimeout(timer)
+      if (args.errors) {
+        reject(new Error(args.errors))
+      } else if (!timedout) {
+        resolve(args)
+      }
+    }
+    once(type, done)
+    emit(type, data)
+  } catch (e) {
+    reject(e)
+  }
+}
 function onNative ({detail: {type, data}}) {
   (events[type] || []).forEach((handler) => handler(data))
 }
