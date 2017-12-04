@@ -83,19 +83,73 @@ return /******/ (function(modules) { // webpackBootstrap
 
 var button = document.querySelector('button');
 var bridge = Object.assign({}, window.nativebridge);
+var clearButton = document.getElementById('clear');
+var payloadArea = document.getElementById('payload');
+var counter = 0;
+var simulationCb = document.getElementById('simulation');
+var output = document.getElementById('output');
 console.log('nativebridge:', bridge);
 
-bridge.on('test', function (payload) {
-  var json = JSON.stringify(payload, null, '  ');
-  button.insertAdjacentHTML('afterend', '<pre>From native: ' + json + '</pre>');
+var dispatchCustomEvent = function dispatchCustomEvent(type, data) {
+  window.dispatchEvent(new window.CustomEvent('nativebridge', { detail: { type: type, data: data } }));
+};
+
+var backup = window.webkit;
+
+// mocked (injected) iOs handler
+function postMessage(_ref) {
+  var type = _ref.type,
+      data = _ref.data;
+
+  if (window.webkit !== backup) {
+    if (type === 'gaConf') {
+      data.cid = 'MOCK_CID';
+    } else if (type === 'test') {
+      data.echo = true;
+    } else {
+      data = {
+        errors: [{ message: 'mock error', errorCode: 1 }]
+      };
+    }
+    data.simulation = true;
+  }
+  dispatchCustomEvent(type, data);
+}
+
+function setupSimulator() {
+  if (simulationCb.checked) {
+    window.webkit = { messageHandlers: { nativebridgeiOS: { postMessage: postMessage } } };
+  } else {
+    window.webkit = backup;
+  }
+}
+
+bridge.on('error', function () {
+  for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+    args[_key] = arguments[_key];
+  }
+
+  output.insertAdjacentHTML('afterbegin', '<pre>' + counter++ + ' - From native: ' + args + ' </pre>');
 });
 
 button.addEventListener('click', function (event) {
-  var type = document.getElementById('type').textContent.trim();
-  var data = document.getElementById('data').textContent.trim();
-  var json = JSON.parse('{' + data + '}');
+  setupSimulator();
 
+  var _JSON$parse = JSON.parse(payloadArea.innerHTML),
+      type = _JSON$parse.type,
+      json = _JSON$parse.json;
+
+  var cb = function cb(payload) {
+    bridge.off(type, cb);
+    var json = JSON.stringify(payload, null, '  ');
+    output.insertAdjacentHTML('afterbegin', '<pre>' + counter++ + ' - From native: ' + json + ' </pre>');
+  };
+  bridge.on(type, cb);
   bridge.emit(type, json);
+});
+
+clearButton.addEventListener('click', function (event) {
+  output.innerHTML = ' ';
 });
 
 /***/ })
