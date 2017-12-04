@@ -45,7 +45,8 @@ Please note: provided callback must be the same as used in `on`-handler
 Make a remote procedure call (RPC) using nativebridge interfaces as described above.
 Supports error handling through timeouts and an errors array.
 
-**Example:**
+##### EXAMPLE:
+
 ```js
 // Auto-bind handlers (once/emit) to complete an RPC-call to native
 nativeBridge.rpc({                          
