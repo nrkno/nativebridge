@@ -7,7 +7,9 @@ import android.util.AttributeSet
 import android.util.Log
 import android.webkit.JavascriptInterface
 import android.webkit.WebView
+import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.exc.InvalidTypeIdException
+import com.fasterxml.jackson.module.kotlin.KotlinModule
 
 @SuppressLint("SetJavaScriptEnabled")
 class NativeBridgeWebView(context: Context, attrs: AttributeSet) : WebView(context, attrs), JavascriptExecutor {
@@ -17,7 +19,7 @@ class NativeBridgeWebView(context: Context, attrs: AttributeSet) : WebView(conte
 
     init {
         @SuppressLint("SetJavaScriptEnabled")
-        connection = Connection(this)
+        connection = Connection(ObjectMapper().registerModule(KotlinModule())!!, this)
         settings?.javaScriptEnabled = true
         addJavascriptInterface(NativeBridgeAndroid(), "NativeBridgeAndroid")
     }

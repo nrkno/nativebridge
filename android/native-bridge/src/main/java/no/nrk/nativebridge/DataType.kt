@@ -1,3 +1,6 @@
-package no.nrk.nativebridge;
+package no.nrk.nativebridge
 
-interface DataType
+interface DataType {
+    interface In
+    interface Out
+}

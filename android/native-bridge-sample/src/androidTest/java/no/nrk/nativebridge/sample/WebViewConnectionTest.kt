@@ -1,25 +1,24 @@
 package no.nrk.nativebridge.sample;
 
-import android.util.Log
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.KotlinModule
 import junit.framework.Assert.assertEquals
 import junit.framework.Assert.assertTrue
 import no.nrk.nativebridge.Connection
 import no.nrk.nativebridge.DataType
-import no.nrk.nativebridge.ConnectionErrorData
+import no.nrk.nativebridge.WebViewConnectionError
 import no.nrk.nativebridge.JavascriptExecutor
 import org.json.JSONObject
 import org.junit.Test
 
 class ConnectionTest {
-    val mapper = ObjectMapper().registerModule(KotlinModule())!!
+    private val mapper = ObjectMapper().registerModule(KotlinModule())!!
 
     @Test
-    fun testSend(){
+    fun testSendSuccessful(){
         val javascript = getJavaScript("testType", TestData("value"))
 
-        val connection = Connection(object: JavascriptExecutor{
+        val connection = Connection(mapper, object: JavascriptExecutor{
             override fun executeJavascript(script: String) {
                 assertEquals(javascript, script)
             }
@@ -30,8 +29,8 @@ class ConnectionTest {
     }
 
     @Test
-    fun testReceive(){
-        val connection = Connection(object: JavascriptExecutor{
+    fun testReceiveSuccessful(){
+        val connection = Connection(mapper, object: JavascriptExecutor{
             override fun executeJavascript(script: String) {
                 /** no-op */
             }
@@ -50,9 +49,50 @@ class ConnectionTest {
     fun testErrorReceiveNoType(){
         val javascript = """{"data":{"key":"value"}}""".trimIndent()
 
-        val connection = Connection(object: JavascriptExecutor{
+        val connection = Connection(mapper, object: JavascriptExecutor{
             override fun executeJavascript(script: String) {
-                assertTrue("bla" == script)
+                assertTrue(script.contains(WebViewConnectionError.TYPE_IS_NULL.message))
+            }
+        })
+
+        connection.receive(javascript)
+    }
+
+
+
+    @Test
+    fun testErrorReceiveNoData(){
+        val javascript = """{"type":"testType"}""".trimIndent()
+
+        val connection = Connection(mapper, object: JavascriptExecutor{
+            override fun executeJavascript(script: String) {
+                assertTrue(script.contains(WebViewConnectionError.DATA_IS_NULL.message))
+            }
+        })
+
+        connection.receive(javascript)
+    }
+
+    @Test
+    fun testErrorInvalidJson(){
+        val javascript = """abc""".trimIndent()
+
+        val connection = Connection(mapper, object: JavascriptExecutor{
+            override fun executeJavascript(script: String) {
+                assertTrue(script.contains(WebViewConnectionError.INVALID_JSON.message))
+            }
+        })
+
+        connection.receive(javascript)
+    }
+
+    @Test
+    fun testErrorInvalidType(){
+        val javascript = """{"type":"invalid","data":{"key":"value"}}""".trimIndent()
+
+        val connection = Connection(mapper, object: JavascriptExecutor{
+            override fun executeJavascript(script: String) {
+                assertTrue(script.contains(""""type":"invalid""") && script.contains(WebViewConnectionError.MISSING_TYPE_HANDLER.message))
             }
         })
 
