@@ -2,17 +2,21 @@
   "name": "@nrk/nativebridge",
   "homepage": "https://nrkno.github.io/nativebridge/",
   "author": "NRK <opensource@nrk.no> (https://www.nrk.no/)",
-  "version": "1.0.0",
+  "version": "1.1.2",
   "license": "MIT",
   "main": "dist/nativebridge.min.js",
   "scripts": {
     "build": "rimraf dist/ && cpx 'src/test.html' dist/ && webpack",
+    "build:watch": "npm run build -- --watch",
     "prepare": "npm run build",
-    "publish:patch": "npm version patch -m 'Release patch %s' && npm run push",
-    "publish:minor": "npm version minor -m 'Release minor %s' && npm run push",
-    "publish:major": "npm version major -m 'Release major %s' && npm run push",
+    "publish:patch": "npm run test && npm version patch -m 'Release patch %s' && npm run push",
+    "publish:minor": "npm run test && npm version minor -m 'Release minor %s' && npm run push",
+    "publish:major": "npm run test && npm version major -m 'Release major %s' && npm run push",
     "push": "git push && git push --tags && npm publish",
     "start": "NODE_ENV=development webpack-dev-server",
+    "lint": "standard",
+    "test": "npm run lint && mocha src/**/*.spec.js*",
+    "test:watch": "mocha --watch src/**/*.spec.js*",
     "static-publish": "static-publish publish --directory ./dist --package ./package.json --verbose --latest"
   },
   "repository": {
@@ -24,9 +28,27 @@
     "babel-loader": "^7.1.2",
     "babel-preset-es2015": "^6.24.1",
     "cpx": "^1.5.0",
+    "expect.js": "0.3.1",
+    "jsdom": "11.4.0",
+    "mocha": "4.0.1",
     "rimraf": "^2.6.1",
+    "sinon": "4.1.2",
     "standard": "^10.0.3",
     "webpack": "^3.5.6",
-    "webpack-dev-server": "^2.7.1"
+    "webpack-dev-server": "^2.7.1",
+    "yargs": "10.0.3"
+  },
+  "standard": {
+    "globals": [
+      "describe",
+      "it",
+      "beforeEach",
+      "afterEach",
+      "before",
+      "after"
+    ],
+    "ignore": [
+      "dist"
+    ]
   }
 }
