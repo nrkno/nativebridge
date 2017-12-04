@@ -33,6 +33,8 @@ nativebridge.off('test', (data) => {})      // Unbind specific handler for 'test
 ```
 
 ##### RPC:
+Make Remote Procedure Call (RPC) using nativebridge methods (once/emit).
+Supports error handling through timeouts and an errors array (errors<Array<{message, errorCode}>>)
 ```js
 // Auto-bind handlers (once/emit) to complete an RPC-call to native
 nativeBridge.rpc({                          

@@ -60,7 +60,7 @@ export function rpc ({type, data, resolve, reject, timeout = DEFAULT_TIMEOUT}) {
     const done = (args) => {
       clearTimeout(timer)
       if (args.errors) {
-        reject(new Error(args.errors))
+        reject(new Error(JSON.stringify(args.errors)))
       } else if (!timedout) {
         resolve(args)
       }
