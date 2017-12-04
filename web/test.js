@@ -39,7 +39,7 @@ function setupSimulator () {
 }
 
 bridge.on('error', (...args) => {
-  output.insertAdjacentHTML('afterbegin', `<pre>${counter++} - From native: ${args} </pre>`)
+  output.insertAdjacentHTML('afterbegin', `<pre>${counter++} - From native: ${JSON.stringify(args)} </pre>`)
 })
 
 button.addEventListener('click', function (event) {
