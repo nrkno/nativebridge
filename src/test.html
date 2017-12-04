@@ -8,19 +8,39 @@
   <style>
     body { font: 16px/1.5 sans-serif; padding: 5% }
     span { display: inline-block; vertical-align: top }
+    #output {
+      background: #eee;
+      border: 1px solid #ddd;
+      padding: 10px;
+    }
+    #output pre::after {
+      content: '';
+      display: block;
+      width: 100%;
+      border-bottom: 1px solid #ddd;
+      padding-top: 12px;
+    }
   </style>
 </head>
 <body>
-  Testing nativebridge
+  <h1>
+    Testing nativebridge
+  </h1>
 
-  Sends:
-  <pre>{
-  type: '<span contenteditable id="type">test</span>',
-  data: {
-    <span contenteditable id="data">&quot;text&quot;: &quot;gyldig JSON&quot;</span>
+  <input id="simulation" type="checkbox" checked /><label for="simulation">Simulation</label>
+
+  <h3>Sends:</h3>
+  <pre id="payload" contenteditable>
+  {
+    "type": "test",
+    "data": {
+      "text": "gyldig JSON"
+    }
   }
-}</pre>
+  </pre>
   <button>Send to native!</button>
+  <button id="clear">Clear</button>
+  <div id="output"> </div>
   <script src="nativebridge.min.js"></script>
   <script src="test.js"></script>
 </body>
