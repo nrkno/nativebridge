@@ -1,7 +1,7 @@
 package no.nrk.nativebridge;
 
+import com.fasterxml.jackson.databind.JsonMappingException
 import com.fasterxml.jackson.databind.ObjectMapper
-import com.fasterxml.jackson.module.kotlin.KotlinModule
 import org.json.JSONException
 import org.json.JSONObject
 
@@ -16,9 +16,14 @@ class Connection(val objectMapper: ObjectMapper,
     val generators = mutableMapOf<String, (String) -> Unit>()
 
     inline fun <reified T:DataType> addHandler(type: String, crossinline callback: (T, Connection) -> Unit) {
+
         val generator: (String) -> Unit = {
-            val dataType: T = objectMapper.readValue(it, T::class.java)
-            callback(dataType, this)
+            try {
+                val dataType: T = objectMapper.readValue(it, T::class.java)
+                callback(dataType, this)
+            } catch (exception: JsonMappingException){
+                sendError(type, mutableListOf(WebViewConnectionError.INVALID_DATA_FOR_HANDLER))
+            }
         }
 
         generators.put(type, generator)
@@ -30,7 +35,7 @@ class Connection(val objectMapper: ObjectMapper,
         try {
             json = JSONObject(payload)
         } catch (exception: JSONException){
-            sendError("error", mutableListOf(WebViewConnectionError.INVALID_JSON))
+            sendError("error", mutableListOf(WebViewConnectionError.ILLEGAL_PAYLOAD_FORMAT))
             return
         }
 
@@ -52,7 +57,7 @@ class Connection(val objectMapper: ObjectMapper,
         val errors = mutableListOf<WebViewConnectionError>()
 
         if (!json.has("type")){
-            errors.add(WebViewConnectionError.TYPE_IS_NULL)
+            errors.add(WebViewConnectionError.MISSING_FIELD_TYPE)
         } else {
             if (generators[json.getString("type")] == null){
                 errors.add(WebViewConnectionError.MISSING_TYPE_HANDLER)
@@ -60,7 +65,7 @@ class Connection(val objectMapper: ObjectMapper,
         }
 
         if (!json.has("data")){
-            errors.add(WebViewConnectionError.DATA_IS_NULL)
+            errors.add(WebViewConnectionError.MISSING_FIELD_DATA)
         }
 
         return errors

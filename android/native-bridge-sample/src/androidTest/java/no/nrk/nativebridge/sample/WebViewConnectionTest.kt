@@ -51,7 +51,7 @@ class ConnectionTest {
 
         val connection = Connection(mapper, object: JavascriptExecutor{
             override fun executeJavascript(script: String) {
-                assertTrue(script.contains(WebViewConnectionError.TYPE_IS_NULL.message))
+                assertTrue(script.contains(WebViewConnectionError.MISSING_FIELD_TYPE.message))
             }
         })
 
@@ -66,7 +66,7 @@ class ConnectionTest {
 
         val connection = Connection(mapper, object: JavascriptExecutor{
             override fun executeJavascript(script: String) {
-                assertTrue(script.contains(WebViewConnectionError.DATA_IS_NULL.message))
+                assertTrue(script.contains(WebViewConnectionError.MISSING_FIELD_DATA.message))
             }
         })
 
@@ -79,7 +79,7 @@ class ConnectionTest {
 
         val connection = Connection(mapper, object: JavascriptExecutor{
             override fun executeJavascript(script: String) {
-                assertTrue(script.contains(WebViewConnectionError.INVALID_JSON.message))
+                assertTrue(script.contains(WebViewConnectionError.ILLEGAL_PAYLOAD_FORMAT.message))
             }
         })
 

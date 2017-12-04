@@ -9,6 +9,7 @@ import android.webkit.WebView.setWebContentsDebuggingEnabled
 import android.webkit.WebViewClient
 import kotlinx.android.synthetic.main.activity_main.*
 import no.nrk.nativebridge.sample.data.datatypes.GaConf
+import no.nrk.nativebridge.sample.data.datatypes.TestData
 
 
 class WebViewActivity : AppCompatActivity() {
@@ -29,6 +30,10 @@ class WebViewActivity : AppCompatActivity() {
                 connection.send("gaConf", gaConf)
                 }
             )
+
+            connection.addHandler("testData", { _ : TestData.In, connection ->
+                /* no-op */
+            })
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
                 setWebContentsDebuggingEnabled(true)

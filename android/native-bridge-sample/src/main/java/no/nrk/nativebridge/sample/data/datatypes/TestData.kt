@@ -1,5 +1,10 @@
 package no.nrk.nativebridge.sample.data.datatypes;
 
+import com.fasterxml.jackson.annotation.JsonProperty
 import no.nrk.nativebridge.DataType
 
-data class TestData(var text: String = "") : DataType
+interface TestData {
+    class In(@JsonProperty(required = true) val text: String) : DataType
+    class Out() : DataType
+}
+

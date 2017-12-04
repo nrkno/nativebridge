@@ -14,7 +14,6 @@ import com.fasterxml.jackson.module.kotlin.KotlinModule
 @SuppressLint("SetJavaScriptEnabled")
 class NativeBridgeWebView(context: Context, attrs: AttributeSet) : WebView(context, attrs), JavascriptExecutor {
 
-    val data = mutableMapOf<String, () -> Unit>()
     val connection: Connection
 
     init {
