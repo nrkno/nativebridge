@@ -17,7 +17,7 @@ iOS 10.2+ | Android 4.4.4+
 
 ## Browser
 
-Used as a producer/consumer-interface for passing messages to/from native app (iOs/Android). Following an `EventEmitter` interface (on/once/off/emit). In addition an RPC method makes calling native interfaces a breeze.
+Used as a producer/consumer-interface for passing messages to/from native app (iOs/Android). Following an `EventEmitter` interface (on/once/off/emit). In addition an RPC-interface makes calling native methods a breeze.
 
 ##### EMIT - *send to native*:
 ```js
