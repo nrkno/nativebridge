@@ -6,6 +6,7 @@
 - [Browser documentation](#browser)
 - [Android documentation](#android)
 - [iOS documentation](#ios)
+- [Algorithm](#algorithm)
 
 ## Support
 ![iOS](https://cdnjs.cloudflare.com/ajax/libs/browser-logos/42.7.1/archive/safari-ios_1-6/safari-ios_1-6_24x24.png) | ![Android](https://cdnjs.cloudflare.com/ajax/libs/browser-logos/42.7.1/android/android_24x24.png)
@@ -16,37 +17,28 @@ iOS 10.2+ | Android 4.4.4+
 
 ## Browser
 
-Used as a producer/consumer-interface for passing messages to/from native app (iOs/Android). Following an `EventEmitter` interface (on/once/off/emit). In addition an RPC method makes calling native interfaces a breeze.
+Used as a producer/consumer-interface for passing messages to/from native app (iOs/Android). Following an `EventEmitter` interface (on/once/off/emit). In addition an RPC-interface makes calling native methods a breeze.
 
 ##### EMIT - *send to native*:
 ```js
 nativebridge.emit('test', { foo: 'bar' })  // Emit 'test' event with data (must be object) to native
 ```
-This will be converted to an exposed method on iOs:
-`window.webkit.messageHandlers.nativebridgeiOS.postMessage({type: "test", data: {foo: "bar"}})`
-or Android:
-`window.NativeBridgeAndroid.send(JSON.stringify({type: "test", data: {foo: "bar"}}))`
 
 ##### ON/ONCE - *receives from native*:
 ```js
 nativebridge.on('test', (data) => {})       // Bind handler to 'test' event emitted from native
 nativebridge.once('test', (data) => {})     // Bind handler to 'test' (one time only) event emitted from native
 ```
-`data` is an object with response from native, e.g `{foo: "baz"}`
 
-##### OFF:
+##### OFF: - *remove handler(s)*
 ```js
 nativebridge.off('test')                    // Unbind all handlers for 'test' event
 nativebridge.off('test', (data) => {})      // Unbind specific handler for 'test' event
 ```
-Please note: provided callback must be the same as used in `on`-handler
 
-##### RPC:
+##### RPC: - *make call to native app using type as contract*
 Make a remote procedure call (RPC) using nativebridge interfaces as described above.
-Supports error handling through timeouts and an errors array.
-
-###### RPC-EXAMPLE:
-
+Resolves with data on completion, or rejects with error details from the app (or timeout).
 ```js
 // Auto-bind handlers (once/emit) to complete an RPC-call to native
 nativeBridge.rpc({                          
@@ -57,18 +49,6 @@ nativeBridge.rpc({
   timeout: 1000                             // with a timeout threshold
 })
 ```
-
-This will emit a message to nativeApp (iOs used here):
-`window.webkit.messageHandlers.nativebridgeiOS.postMessage({type: "test", data: {foo: "bar"}})`
-
-If an error occurs in the native app, an Error object will be rejected:
-`err.message = '[{message: "no handler available", errorCode: 100}]'`
-
-If the native app does not respond within give timeout, an Error object will be rejected:
-`err.message = 'RPC for test using {} timed out after 1000ms'`
-
-If the RPC succeeds, the resolve-callback will be ran with the following data object
-`{foo: "baz"}`
 
 
 ### Installation
@@ -134,6 +114,33 @@ webView.evaluateJavaScript("window.dispatchEvent(new CustomEvent('nativebridge',
   (value, error) in
 })
 ```
+
+---
+
+## Algorithm
+
+##### Emit
+A data object is sent using `type` as topic to an exposed method on either:
+- *iOs*:
+`window.webkit.messageHandlers.nativebridgeiOS.postMessage({type: "test", data: {foo: "bar"}})`
+- or *Android*:
+`window.NativeBridgeAndroid.send(JSON.stringify({type: "test", data: {foo: "bar"}}))`
+
+##### iOs/Android handler
+Type-handlers are mapped to native functions, using data-object as an argument e.g `myHandler({foo: "bar"})`. The app injects a js-snippet to dispatch a message back to the webpage using CustomEvents
+`window.dispatchEvent(new CustomEvent('nativebridge', { detail: {type, data} }))`
+
+##### On
+The CustomEvent dispatched from the native app is ran using attached callback-handlers on the given type.
+
+##### Error handling
+If an error occurs in the native app, an Error object will be rejected, eg.
+`err.message = '[{message: "no handler available", errorCode: 100}]'`
+
+##### RPC
+The RPC-method is made to simplify on/off/emit-logistics. In addition it supports a timeout, which will throw an error if timeout is reached:
+`err.message = 'RPC for test using {} timed out after 1000ms'`
+
 
 ---
 
