@@ -90,14 +90,17 @@ exports.on = on;
 exports.off = off;
 exports.once = once;
 exports.emit = emit;
-exports.validateInput = validateInput;
+exports.validateRpcInput = validateRpcInput;
 exports.rpc = rpc;
 exports.setupNativeLink = setupNativeLink;
 exports.destroy = destroy;
-var events = {};
 var DEFAULT_TIMEOUT = 1000;
+var events = exports.events = {};
 
 function on(type, handler) {
+  if (typeof type !== 'string') {
+    throw new Error('type must be a string');
+  }
   if (typeof handler !== 'function') {
     throw new Error('Handler must be of type function');
   }
@@ -105,12 +108,24 @@ function on(type, handler) {
 }
 
 function off(type, handler) {
+  if (typeof type !== 'string') {
+    throw new Error('type must be a string');
+  }
   events[type] = (events[type] || []).filter(function (fn) {
     return handler && fn !== handler;
   });
+  if (events[type].length === 0) {
+    delete events[type];
+  }
 }
 
 function once(type, handler) {
+  if (typeof type !== 'string') {
+    throw new Error('type must be a string');
+  }
+  if (typeof handler !== 'function') {
+    throw new Error('Handler must be of type function');
+  }
   var newHandler = function newHandler() {
     off(type, newHandler);
     handler.apply(undefined, arguments);
@@ -130,17 +145,17 @@ function emit(type) {
   }
 }
 
-function validateInput(_ref) {
+function validateRpcInput(_ref) {
   var type = _ref.type,
       data = _ref.data,
       resolve = _ref.resolve,
       reject = _ref.reject,
       timeout = _ref.timeout;
 
-  if (typeof type === 'undefined' || typeof type !== 'string') {
+  if (typeof type !== 'string') {
     throw TypeError('type argument must be a String');
   }
-  if (typeof data === 'undefined' || data === null || (typeof data === 'undefined' ? 'undefined' : _typeof(data)) !== 'object') {
+  if (data === null || (typeof data === 'undefined' ? 'undefined' : _typeof(data)) !== 'object') {
     throw TypeError('data argument must be an Object');
   }
   if (typeof resolve !== 'function') {
@@ -164,7 +179,7 @@ function rpc(_ref2) {
       timeout = _ref2$timeout === undefined ? DEFAULT_TIMEOUT : _ref2$timeout;
 
   try {
-    validateInput({ type: type, resolve: resolve, reject: reject, data: data, timeout: timeout });
+    validateRpcInput({ type: type, resolve: resolve, reject: reject, data: data, timeout: timeout });
     var timedout = false;
     var timer = setTimeout(function () {
       timedout = true;
@@ -205,7 +220,9 @@ function destroy() {
     });
     delete events[type];
   });
-  window.removeEventListener('nativebridge', onNative);
+  if (typeof window !== 'undefined') {
+    window.removeEventListener('nativebridge', onNative);
+  }
 }
 
 if (typeof window !== 'undefined') {

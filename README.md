@@ -6,7 +6,7 @@
 - [Browser documentation](#browser)
 - [Android documentation](#android)
 - [iOS documentation](#ios)
-- [Algorithm](#algorithm)
+- [How does it work](#how does it work)
 
 ## Support
 ![iOS](https://cdnjs.cloudflare.com/ajax/libs/browser-logos/42.7.1/archive/safari-ios_1-6/safari-ios_1-6_24x24.png) | ![Android](https://cdnjs.cloudflare.com/ajax/libs/browser-logos/42.7.1/android/android_24x24.png)
@@ -117,7 +117,7 @@ webView.evaluateJavaScript("window.dispatchEvent(new CustomEvent('nativebridge',
 
 ---
 
-## Algorithm
+## How does it work
 
 ##### Emit
 A data object is sent using `type` as topic to an exposed method on either:
