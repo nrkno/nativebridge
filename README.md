@@ -110,9 +110,33 @@ Describe usage here
 ##### EXAMPLE:
 
 ```
-webView.evaluateJavaScript("window.dispatchEvent(new CustomEvent('nativebridge', { detail: \(object) }))") {
-  (value, error) in
-})
+class NativeBridgeiOS: NSObject {
+    let webView: WKWebView
+
+    init(webView: WKWebView) {
+        self.webView = webView
+        super.init()
+
+        // Add script message handler
+        webView.configuration.userContentController.add(self, name: "nativebridgeiOS")
+    }
+
+    // Send json to webview
+    func send(json: String) {
+        webView.evaluateJavaScript("window.dispatchEvent(new CustomEvent(\"nativebridge\", {\"detail\":\(json)}))")
+    }
+
+    // Receive json from webview
+    private func receive(payload: Any) { /* Handle incoming json */ }
+}
+
+extension NativeBridgeiOS: WKScriptMessageHandler {
+    func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
+        if message.name == "nativebridgeiOS" {
+            receive(payload: message.body)
+        }
+    }
+}
 ```
 
 ---
