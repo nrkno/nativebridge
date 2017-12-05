@@ -38,7 +38,7 @@ nativebridge.off('test', (data) => {})      // Unbind specific handler for 'test
 
 ##### RPC: - *make call to native app using type as contract*
 Make a remote procedure call (RPC) using nativebridge interfaces as described above.
-Resolves on completion, or rejects when a timeout occurs or the app responds with error.
+Resolves with data on completion, or rejects with error details from the app (or timeout).
 ```js
 // Auto-bind handlers (once/emit) to complete an RPC-call to native
 nativeBridge.rpc({                          
