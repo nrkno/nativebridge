@@ -6,7 +6,7 @@ const watch = yargs.watch
 
 module.exports = {
   devtool: 'source-map',
-  context: path.resolve(__dirname, 'src'),
+  context: path.resolve(__dirname, 'web'),
   entry: {
     'nativebridge': './index.js',
     'nativebridge.min': './index.js',
@@ -30,7 +30,7 @@ module.exports = {
     }]
   },
   devServer: {
-    contentBase: [path.join(__dirname, 'src')],
+    contentBase: [path.join(__dirname, 'web')],
     headers: {'Content-Security-Policy': `default-src 'self' https://*.nrk.no; style-src 'self' https://*.nrk.no 'unsafe-inline'`},
     historyApiFallback: { index: 'test.html' }, // Make test-file index
     inline: false                               // Must use for CSP

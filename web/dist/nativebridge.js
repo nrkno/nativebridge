@@ -173,7 +173,7 @@ function rpc(_ref2) {
     var done = function done(args) {
       clearTimeout(timer);
       if (args.errors) {
-        reject(new Error(args.errors));
+        reject(new Error(JSON.stringify(args.errors)));
       } else if (!timedout) {
         resolve(args);
       }

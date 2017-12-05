@@ -1,6 +1,7 @@
 # @nrk/nativebridge
 
 > Lightweight and efficient bridge between webview and native app
+> Primary use case is for sharing state.
 
 - [Browser documentation](#browser)
 - [Android documentation](#android)
@@ -15,26 +16,37 @@ iOS 10.2+ | Android 4.4.4+
 
 ## Browser
 
-Describe usage here
+Used as a producer/consumer-interface for passing messages to/from native app (iOs/Android). Following an `EventEmitter` interface (on/once/off/emit). In addition an RPC method makes calling native interfaces a breeze.
 
 ##### EMIT - *send to native*:
 ```js
 nativebridge.emit('test', { foo: 'bar' })  // Emit 'test' event with data (must be object) to native
 ```
+This will be converted to an exposed method on iOs:
+`window.webkit.messageHandlers.nativebridgeiOS.postMessage({type: "test", data: {foo: "bar"}})`
+or Android:
+`window.NativeBridgeAndroid.send(JSON.stringify({type: "test", data: {foo: "bar"}}))`
+
 ##### ON/ONCE - *receives from native*:
 ```js
 nativebridge.on('test', (data) => {})       // Bind handler to 'test' event emitted from native
-nativebridge.once('test', (data) => {})     // Bind handler to 'test' (once) event emitted from native
+nativebridge.once('test', (data) => {})     // Bind handler to 'test' (one time only) event emitted from native
 ```
+`data` is an object with response from native, e.g `{foo: "baz"}`
+
 ##### OFF:
 ```js
 nativebridge.off('test')                    // Unbind all handlers for 'test' event
 nativebridge.off('test', (data) => {})      // Unbind specific handler for 'test' event
 ```
+Please note: provided callback must be the same as used in `on`-handler
 
 ##### RPC:
-Make Remote Procedure Call (RPC) using nativebridge methods (once/emit).
-Supports error handling through timeouts and an errors array (errors<Array<{message, errorCode}>>)
+Make a remote procedure call (RPC) using nativebridge interfaces as described above.
+Supports error handling through timeouts and an errors array.
+
+###### RPC-EXAMPLE:
+
 ```js
 // Auto-bind handlers (once/emit) to complete an RPC-call to native
 nativeBridge.rpc({                          
@@ -45,6 +57,19 @@ nativeBridge.rpc({
   timeout: 1000                             // with a timeout threshold
 })
 ```
+
+This will emit a message to nativeApp (iOs used here):
+`window.webkit.messageHandlers.nativebridgeiOS.postMessage({type: "test", data: {foo: "bar"}})`
+
+If an error occurs in the native app, an Error object will be rejected:
+`err.message = '[{message: "no handler available", errorCode: 100}]'`
+
+If the native app does not respond within give timeout, an Error object will be rejected:
+`err.message = 'RPC for test using {} timed out after 1000ms'`
+
+If the RPC succeeds, the resolve-callback will be ran with the following data object
+`{foo: "baz"}`
+
 
 ### Installation
 

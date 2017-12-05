@@ -39,12 +39,12 @@ function setupSimulator () {
 }
 
 bridge.on('error', (...args) => {
-  output.insertAdjacentHTML('afterbegin', `<pre>${counter++} - From native: ${args} </pre>`)
+  output.insertAdjacentHTML('afterbegin', `<pre>${counter++} - From native: ${JSON.stringify(args)} </pre>`)
 })
 
 button.addEventListener('click', function (event) {
   setupSimulator()
-  const {type, json} = JSON.parse(payloadArea.innerHTML)
+  const {type, data} = JSON.parse(payloadArea.innerHTML)
 
   const cb = function (payload) {
     bridge.off(type, cb)
@@ -52,7 +52,7 @@ button.addEventListener('click', function (event) {
     output.insertAdjacentHTML('afterbegin', `<pre>${counter++} - From native: ${json} </pre>`)
   }
   bridge.on(type, cb)
-  bridge.emit(type, json)
+  bridge.emit(type, data)
 })
 
 clearButton.addEventListener('click', function (event) {

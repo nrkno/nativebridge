@@ -6,7 +6,7 @@
   "license": "MIT",
   "main": "dist/nativebridge.min.js",
   "scripts": {
-    "build": "rimraf dist/ && cpx 'src/test.html' dist/ && webpack",
+    "build": "rimraf dist/ && cpx 'web/test.html' dist/ && webpack",
     "build:watch": "npm run build -- --watch",
     "prepare": "npm run build",
     "publish:patch": "npm run test && npm version patch -m 'Release patch %s' && npm run push",
@@ -15,8 +15,8 @@
     "push": "git push && git push --tags && npm publish",
     "start": "NODE_ENV=development webpack-dev-server",
     "lint": "standard",
-    "test": "npm run lint && mocha src/**/*.spec.js*",
-    "test:watch": "mocha --watch src/**/*.spec.js*",
+    "test": "npm run lint && mocha web/**/*.spec.js*",
+    "test:watch": "mocha --watch web/**/*.spec.js*",
     "static-publish": "static-publish publish --directory ./dist --package ./package.json --verbose --latest"
   },
   "repository": {
