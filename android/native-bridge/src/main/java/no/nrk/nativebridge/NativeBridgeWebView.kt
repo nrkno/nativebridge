@@ -11,6 +11,7 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.exc.InvalidTypeIdException
 import com.fasterxml.jackson.module.kotlin.KotlinModule
 
+const val TAG = "NativeBridgeAndroid"
 @SuppressLint("SetJavaScriptEnabled")
 class NativeBridgeWebView(context: Context, attrs: AttributeSet) : WebView(context, attrs), JavascriptExecutor {
 
@@ -30,13 +31,13 @@ class NativeBridgeWebView(context: Context, attrs: AttributeSet) : WebView(conte
                 val runnableCode = Runnable { connection.receive(json) }
                 handler.post(runnableCode)
             } catch (e: InvalidTypeIdException){
-                Log.d("NativeBridgeWebView", "Type ID '${e.typeId}' not recognized. Ignoring.")
+                Log.d(TAG, "Type ID '${e.typeId}' not recognized. Ignoring.")
             }
         }
     }
 
     override fun executeJavascript(javascript: String){
-        Log.d("NativeBridgeWebView", "Passing $javascript to web view")
+        Log.d(TAG, "Passing $javascript to web view")
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT){
             evaluateJavascript(javascript, { /* no-op */ })
         } else {
