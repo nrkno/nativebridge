@@ -129,7 +129,7 @@ bridge.on('error', function () {
     args[_key] = arguments[_key];
   }
 
-  output.insertAdjacentHTML('afterbegin', '<pre>' + counter++ + ' - From native: ' + args + ' </pre>');
+  output.insertAdjacentHTML('afterbegin', '<pre>' + counter++ + ' - From native: ' + JSON.stringify(args) + ' </pre>');
 });
 
 button.addEventListener('click', function (event) {
@@ -137,7 +137,7 @@ button.addEventListener('click', function (event) {
 
   var _JSON$parse = JSON.parse(payloadArea.innerHTML),
       type = _JSON$parse.type,
-      json = _JSON$parse.json;
+      data = _JSON$parse.data;
 
   var cb = function cb(payload) {
     bridge.off(type, cb);
@@ -145,7 +145,7 @@ button.addEventListener('click', function (event) {
     output.insertAdjacentHTML('afterbegin', '<pre>' + counter++ + ' - From native: ' + json + ' </pre>');
   };
   bridge.on(type, cb);
-  bridge.emit(type, json);
+  bridge.emit(type, data);
 });
 
 clearButton.addEventListener('click', function (event) {
