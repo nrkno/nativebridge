@@ -70,59 +70,89 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/ 	__webpack_require__.p = "/";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 0);
+/******/ 	return __webpack_require__(__webpack_require__.s = 1);
 /******/ })
 /************************************************************************/
 /******/ ([
-/* 0 */
+/* 0 */,
+/* 1 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var events = {};
+var button = document.querySelector('button');
+var bridge = Object.assign({}, window.nativebridge);
+var clearButton = document.getElementById('clear');
+var payloadArea = document.getElementById('payload');
+var counter = 0;
+var simulationCb = document.getElementById('simulation');
+var output = document.getElementById('output');
+console.log('nativebridge:', bridge);
 
-function on(type, handler) {
-  if (typeof handler !== 'function') {
-    throw new Error('Handler must be of type function');
+var dispatchCustomEvent = function dispatchCustomEvent(type, data) {
+  window.dispatchEvent(new window.CustomEvent('nativebridge', { detail: { type: type, data: data } }));
+};
+
+var backup = window.webkit;
+
+// mocked (injected) iOs handler
+function postMessage(_ref) {
+  var type = _ref.type,
+      data = _ref.data;
+
+  if (window.webkit !== backup) {
+    if (type === 'gaConf') {
+      data.cid = 'MOCK_CID';
+    } else if (type === 'test') {
+      data.echo = true;
+    } else {
+      data = {
+        errors: [{ message: 'mock error', errorCode: 1 }]
+      };
+    }
+    data.simulation = true;
   }
-  (events[type] = events[type] || []).push(handler);
+  dispatchCustomEvent(type, data);
 }
 
-function off(type, handler) {
-  events[type] = (events[type] || []).filter(function (fn) {
-    return handler && fn !== handler;
-  });
-}
-
-function emit(type) {
-  var data = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
-
-  if (window.webkit && window.webkit.messageHandlers) {
-    window.webkit.messageHandlers.nativebridgeiOS.postMessage({ type: type, data: data });
-  } else if (window.NativeBridgeAndroid) {
-    window.NativeBridgeAndroid.send(JSON.stringify({ type: type, data: data }));
+function setupSimulator() {
+  if (simulationCb.checked) {
+    window.webkit = { messageHandlers: { nativebridgeiOS: { postMessage: postMessage } } };
   } else {
-    throw new Error('No native bridge defined');
+    window.webkit = backup;
   }
 }
 
-function onNative(_ref) {
-  var _ref$detail = _ref.detail,
-      type = _ref$detail.type,
-      data = _ref$detail.data;
+bridge.on('error', function () {
+  for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+    args[_key] = arguments[_key];
+  }
 
-  (events[type] || []).forEach(function (handler) {
-    return handler(data);
-  });
-}
+  output.insertAdjacentHTML('afterbegin', '<pre>' + counter++ + ' - From native: ' + JSON.stringify(args) + ' </pre>');
+});
 
-if (typeof window !== 'undefined') {
-  window.addEventListener('nativebridge', onNative);
-}
+button.addEventListener('click', function (event) {
+  setupSimulator();
 
-module.exports = { on: on, off: off, emit: emit };
+  var _JSON$parse = JSON.parse(payloadArea.innerHTML),
+      type = _JSON$parse.type,
+      data = _JSON$parse.data;
+
+  var cb = function cb(payload) {
+    bridge.off(type, cb);
+    var json = JSON.stringify(payload, null, '  ');
+    output.insertAdjacentHTML('afterbegin', '<pre>' + counter++ + ' - From native: ' + json + ' </pre>');
+  };
+  bridge.on(type, cb);
+  bridge.emit(type, data);
+});
+
+clearButton.addEventListener('click', function (event) {
+  output.innerHTML = ' ';
+});
 
 /***/ })
 /******/ ]);
 });
+//# sourceMappingURL=test.js.map

@@ -1,10 +1,12 @@
 # @nrk/nativebridge
 
 > Lightweight and efficient bridge between webview and native app
+> Primary use case is for sharing state.
 
 - [Browser documentation](#browser)
 - [Android documentation](#android)
 - [iOS documentation](#ios)
+- [Algorithm](#algorithm)
 
 ## Support
 ![iOS](https://cdnjs.cloudflare.com/ajax/libs/browser-logos/42.7.1/archive/safari-ios_1-6/safari-ios_1-6_24x24.png) | ![Android](https://cdnjs.cloudflare.com/ajax/libs/browser-logos/42.7.1/android/android_24x24.png)
@@ -15,20 +17,37 @@ iOS 10.2+ | Android 4.4.4+
 
 ## Browser
 
-Describe usage here
+Used as a producer/consumer-interface for passing messages to/from native app (iOs/Android). Following an `EventEmitter` interface (on/once/off/emit). In addition an RPC-interface makes calling native methods a breeze.
 
 ##### EMIT - *send to native*:
-```
+```js
 nativebridge.emit('test', { foo: 'bar' })  // Emit 'test' event with data (must be object) to native
 ```
-##### ON - *receives from native*:
+
+##### ON/ONCE - *receives from native*:
+```js
+nativebridge.on('test', (data) => {})       // Bind handler to 'test' event emitted from native
+nativebridge.once('test', (data) => {})     // Bind handler to 'test' (one time only) event emitted from native
 ```
-nativebridge.on('test', (data) => {})      // Bind handler to 'test' event emitted from native
+
+##### OFF: - *remove handler(s)*
+```js
+nativebridge.off('test')                    // Unbind all handlers for 'test' event
+nativebridge.off('test', (data) => {})      // Unbind specific handler for 'test' event
 ```
-##### OFF:
-```
-nativebridge.off('test')                   // Unbind all handlers for 'test' event
-nativebridge.off('test', (data) => {})     // Unbind specific handler for 'test' event
+
+##### RPC: - *make call to native app using type as contract*
+Make a remote procedure call (RPC) using nativebridge interfaces as described above.
+Resolves with data on completion, or rejects with error details from the app (or timeout).
+```js
+// Auto-bind handlers (once/emit) to complete an RPC-call to native
+nativeBridge.rpc({                          
+  type: 'test',                             // using 'test' as event
+  data: {},                                 // with data (args)
+  resolve: (data) => {},                    // using callback on success
+  reject: (err) => {},                      // or rejection on error
+  timeout: 1000                             // with a timeout threshold
+})
 ```
 
 
@@ -98,12 +117,39 @@ webView.evaluateJavaScript("window.dispatchEvent(new CustomEvent('nativebridge',
 
 ---
 
-## Local development
+## Algorithm
+
+##### Emit
+A data object is sent using `type` as topic to an exposed method on either:
+- *iOs*:
+`window.webkit.messageHandlers.nativebridgeiOS.postMessage({type: "test", data: {foo: "bar"}})`
+- or *Android*:
+`window.NativeBridgeAndroid.send(JSON.stringify({type: "test", data: {foo: "bar"}}))`
+
+##### iOs/Android handler
+Type-handlers are mapped to native functions, using data-object as an argument e.g `myHandler({foo: "bar"})`. The app injects a js-snippet to dispatch a message back to the webpage using CustomEvents
+`window.dispatchEvent(new CustomEvent('nativebridge', { detail: {type, data} }))`
+
+##### On
+The CustomEvent dispatched from the native app is ran using attached callback-handlers on the given type.
+
+##### Error handling
+If an error occurs in the native app, an Error object will be rejected, eg.
+`err.message = '[{message: "no handler available", errorCode: 100}]'`
+
+##### RPC
+The RPC-method is made to simplify on/off/emit-logistics. In addition it supports a timeout, which will throw an error if timeout is reached:
+`err.message = 'RPC for test using {} timed out after 1000ms'`
+
+
+---
+
+## Local development (web)
 First clone `@nrk/nativebridge` and install its dependencies:
 
 ```bash
 git clone git@github.com:nrkno/nativebridge.git
-cd nativebridge
+cd nativebridge/web
 npm install && npm start
 ```
 
