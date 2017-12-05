@@ -1,7 +1,10 @@
-const events = {}
 const DEFAULT_TIMEOUT = 1000
+export const events = {}
 
 export function on (type, handler) {
+  if (typeof type !== 'string') {
+    throw new Error('type must be a string')
+  }
   if (typeof handler !== 'function') {
     throw new Error('Handler must be of type function')
   }
@@ -9,10 +12,22 @@ export function on (type, handler) {
 }
 
 export function off (type, handler) {
+  if (typeof type !== 'string') {
+    throw new Error('type must be a string')
+  }
   events[type] = (events[type] || []).filter((fn) => handler && fn !== handler)
+  if (events[type].length === 0) {
+    delete events[type]
+  }
 }
 
 export function once (type, handler) {
+  if (typeof type !== 'string') {
+    throw new Error('type must be a string')
+  }
+  if (typeof handler !== 'function') {
+    throw new Error('Handler must be of type function')
+  }
   const newHandler = function (...args) {
     off(type, newHandler)
     handler(...args)
@@ -30,11 +45,11 @@ export function emit (type, data = {}) {
   }
 }
 
-export function validateInput ({type, data, resolve, reject, timeout}) {
-  if (typeof type === 'undefined' || typeof type !== 'string') {
+export function validateRpcInput ({type, data, resolve, reject, timeout}) {
+  if (typeof type !== 'string') {
     throw TypeError('type argument must be a String')
   }
-  if (typeof data === 'undefined' || data === null || typeof data !== 'object') {
+  if (data === null || typeof data !== 'object') {
     throw TypeError('data argument must be an Object')
   }
   if (typeof resolve !== 'function') {
@@ -51,7 +66,7 @@ export function validateInput ({type, data, resolve, reject, timeout}) {
 
 export function rpc ({type, data, resolve, reject, timeout = DEFAULT_TIMEOUT}) {
   try {
-    validateInput({type, resolve, reject, data, timeout})
+    validateRpcInput({type, resolve, reject, data, timeout})
     let timedout = false
     const timer = setTimeout(function () {
       timedout = true
@@ -86,7 +101,9 @@ export function destroy () {
     })
     delete events[type]
   })
-  window.removeEventListener('nativebridge', onNative)
+  if (typeof window !== 'undefined') {
+    window.removeEventListener('nativebridge', onNative)
+  }
 }
 
 if (typeof window !== 'undefined') {
