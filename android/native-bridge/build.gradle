@@ -23,14 +23,14 @@ android {
 
 }
 
+ext {
+    jackson = "2.8.9"
+}
+
 dependencies {
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
-    testImplementation 'junit:junit:4.12'
-    androidTestImplementation 'com.android.support.test:runner:1.0.1'
-    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
     androidTestCompile "org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version"
-    compile 'com.fasterxml.jackson.core:jackson-core:2.8.9'
-    compile 'com.fasterxml.jackson.core:jackson-databind:2.8.9'
-    compile 'com.fasterxml.jackson.module:jackson-module-kotlin:2.8.9'
+    compile "com.fasterxml.jackson.core:jackson-core:$jackson"
+    compile "com.fasterxml.jackson.core:jackson-databind:$jackson"
+    compile "com.fasterxml.jackson.module:jackson-module-kotlin:$jackson"
 }

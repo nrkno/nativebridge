@@ -30,13 +30,13 @@ class NativeBridgeWebView(context: Context, attrs: AttributeSet) : WebView(conte
                 val runnableCode = Runnable { connection.receive(json) }
                 handler.post(runnableCode)
             } catch (e: InvalidTypeIdException){
-                Log.d("NativeBridge", "Type ID '${e.typeId}' not recognized. Ignoring.")
+                Log.d("NativeBridgeWebView", "Type ID '${e.typeId}' not recognized. Ignoring.")
             }
         }
     }
 
     override fun executeJavascript(javascript: String){
-        Log.d("NativeBridge", "Passing $javascript to web view")
+        Log.d("NativeBridgeWebView", "Passing $javascript to web view")
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT){
             evaluateJavascript(javascript, { /* no-op */ })
         } else {

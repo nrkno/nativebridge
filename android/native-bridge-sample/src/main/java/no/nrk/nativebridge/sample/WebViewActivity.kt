@@ -26,8 +26,8 @@ class WebViewActivity : AppCompatActivity() {
 
         webview?.apply {
             connection.addHandler("gaConf", { _ : GaConf.In, connection ->
-                val gaConf = GaConf.Out("35009a79-1a05-49d7-b876-2b884d0f825b")
-                connection.send("gaConf", gaConf)
+                    val gaConf = GaConf.Out("35009a79-1a05-49d7-b876-2b884d0f825b")
+                    connection.send("gaConf", gaConf)
                 }
             )
 

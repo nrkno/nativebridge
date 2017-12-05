@@ -1,6 +1,6 @@
 package no.nrk.nativebridge
 
-interface DataType {
+class DataType {
     interface In
     interface Out
 }
