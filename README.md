@@ -6,7 +6,7 @@
 - [Browser documentation](#browser)
 - [Android documentation](#android)
 - [iOS documentation](#ios)
-- [How does it work](#how does it work)
+- [How does it work](#how-does-it-work)
 
 ## Support
 ![iOS](https://cdnjs.cloudflare.com/ajax/libs/browser-logos/42.7.1/archive/safari-ios_1-6/safari-ios_1-6_24x24.png) | ![Android](https://cdnjs.cloudflare.com/ajax/libs/browser-logos/42.7.1/android/android_24x24.png)
