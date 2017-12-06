@@ -1,3 +1,0 @@
-include ':native-bridge', ':native-bridge-sample'
-
-rootProject.name = 'native-bridge-root'
