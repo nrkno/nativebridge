@@ -109,7 +109,7 @@ Describe usage here
 
 ##### EXAMPLE:
 
-```
+```swift
 webView.evaluateJavaScript("window.dispatchEvent(new CustomEvent('nativebridge', { detail: \(object) }))") {
   (value, error) in
 })
