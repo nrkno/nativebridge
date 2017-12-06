@@ -1,6 +1,6 @@
 # @nrk/nativebridge
 
-> Lightweight and efficient bridge between webview and native app
+> Lightweight and efficient bridge between webview and native app.
 > Primary use case is for sharing state.
 
 - [Browser documentation](#browser)
@@ -127,7 +127,7 @@ A data object is sent using `type` as topic to an exposed method on either:
 `window.NativeBridgeAndroid.send(JSON.stringify({type: "test", data: {foo: "bar"}}))`
 
 ##### iOs/Android handler
-Type-handlers are mapped to native functions, using data-object as an argument e.g `myHandler({foo: "bar"})`. The app injects a js-snippet to dispatch a message back to the webpage using CustomEvents
+Type-handlers are mapped to native functions, using data-object as an argument e.g `typeHandler({type: "test", data: {foo: "bar"}})`. The app injects a js-snippet to dispatch a message back to the webpage using CustomEvents
 `window.dispatchEvent(new CustomEvent('nativebridge', { detail: {type, data} }))`
 
 ##### On
