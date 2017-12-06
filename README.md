@@ -76,30 +76,48 @@ require(['https://static.nrk.no/nativebridge/X.X.X/nativebridge.min.js'], functi
 
 ## Android
 
-Describe usage here
+The Android library is written in Kotlin.
 
-##### EXAMPLE:
+#### Download
+Add the dependency to your app level build.gradle file:
 ```java
-private class nativebridgeAndroid {
-  @JavascriptInterface
-
-  // Receives from webview
-  fun on(json: String){
-    Log.d("WebViewBridgeTest", "Called from web " + json)
-  }
-
-  // Send to webview
-  fun emit(type: String, data: Object) {
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-      var event = JSON.stringify({detail: {type, data}})
-      webView?.loadUrl("javascript:window.dispatchEvent(new CustomEvent('nativebridge', ' + event + ' ))")
-    }
-  }
+dependencies {
+  compile 'no.nrk.nativebridge:nativebridge:1.0.0-SNAPSHOT'
 }
-
-// Add interface to webview
-webView.addJavascriptInterface(new nativebridgeAndroid(), "interface");
 ```
+
+Note that the library has a dependency on Jackson.
+
+#### Usage
+Instead of using ```android.webkit.WebView```, use ```no.nrk.NativeBridgeWebView```. If you're already extending ```WebView```, you must instead extend ```NativeBridgeWebView```.
+
+Create classes implementing the ```DataType.In``` and ```DataType.Out``` interfaces. ```DataType.In``` corresponds to the JSON received _from_ the webview, while ```DataType.Out``` corresponds to the data we want to pass _to_ the webview.
+
+Register a handler for the datatype, and you've successfully established a bridge between your app and the webview:
+```java
+webview.connection.addHandler("someType", { _ : SomeType.In, connection ->
+    connection.send("someType", SomeType.Out("data"))
+  }
+)
+```
+
+As an example we are using the bridge to enable us to track Google Analytics sessions with the same client ID (cid) in the native app and webview. We've defined the following ```DataType```:
+
+```java
+class GaConf {
+    class In : DataType.In
+    class Out(val cid: String) : DataType.Out
+}
+```
+
+The webview signalises to the app that it's ready to receive the cid by sending an empty JSON object, and we pass it the cid using the ```connection.send()``` method:
+```java
+connection.addHandler("gaConf", { _ : GaConf.In, connection ->      
+        connection.send("gaConf", GaConf.Out("some-client-id"))
+    }
+)```
+
+See the [sample code](https://github.com/nrkno/nativebridge-android/tree/master/native-bridge-sample) for a complete example.
 
 ---
 
