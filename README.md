@@ -79,7 +79,7 @@ require(['https://static.nrk.no/nativebridge/X.X.X/nativebridge.min.js'], functi
 Describe usage here
 
 ##### EXAMPLE:
-```
+```java
 private class nativebridgeAndroid {
   @JavascriptInterface
 
