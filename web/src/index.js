@@ -1,53 +1,53 @@
 const DEFAULT_TIMEOUT = 1000
 export const events = {}
 
-export function on (type, handler) {
-  if (typeof type !== 'string') {
-    throw new Error('type must be a string')
+export function on (topic, handler) {
+  if (typeof topic !== 'string') {
+    throw new Error('topic must be a string')
   }
   if (typeof handler !== 'function') {
-    throw new Error('Handler must be of type function')
+    throw new Error('Handler must be of topic function')
   }
-  (events[type] = events[type] || []).push(handler)
+  (events[topic] = events[topic] || []).push(handler)
 }
 
-export function off (type, handler) {
-  if (typeof type !== 'string') {
-    throw new Error('type must be a string')
+export function off (topic, handler) {
+  if (typeof topic !== 'string') {
+    throw new Error('topic must be a string')
   }
-  events[type] = (events[type] || []).filter((fn) => handler && fn !== handler)
-  if (events[type].length === 0) {
-    delete events[type]
+  events[topic] = (events[topic] || []).filter((fn) => handler && fn !== handler)
+  if (events[topic].length === 0) {
+    delete events[topic]
   }
 }
 
-export function once (type, handler) {
-  if (typeof type !== 'string') {
+export function once (topic, handler) {
+  if (typeof topic !== 'string') {
     throw new Error('type must be a string')
   }
   if (typeof handler !== 'function') {
     throw new Error('Handler must be of type function')
   }
   const newHandler = function (...args) {
-    off(type, newHandler)
+    off(topic, newHandler)
     handler(...args)
   }
-  on(type, newHandler)
+  on(topic, newHandler)
 }
 
-export function emit (type, data = {}) {
+export function emit (topic, data = {}) {
   if (window.webkit && window.webkit.messageHandlers) {
-    window.webkit.messageHandlers.nativebridgeiOS.postMessage({type, data})
+    window.webkit.messageHandlers.nativebridgeiOS.postMessage({topic, data})
   } else if (window.NativeBridgeAndroid) {
-    window.NativeBridgeAndroid.send(JSON.stringify({type, data}))
+    window.NativeBridgeAndroid.send(JSON.stringify({topic, data}))
   } else {
     throw new Error('No native bridge defined')
   }
 }
 
-export function validateRpcInput ({type, data, resolve, reject, timeout}) {
-  if (typeof type !== 'string') {
-    throw TypeError('type argument must be a String')
+export function validateRpcInput ({topic, data, resolve, reject, timeout}) {
+  if (typeof topic !== 'string') {
+    throw TypeError('topic argument must be a String')
   }
   if (data === null || typeof data !== 'object') {
     throw TypeError('data argument must be an Object')
@@ -64,13 +64,13 @@ export function validateRpcInput ({type, data, resolve, reject, timeout}) {
   return true
 }
 
-export function rpc ({type, data, resolve, reject, timeout = DEFAULT_TIMEOUT}) {
+export function rpc ({topic, data, resolve, reject, timeout = DEFAULT_TIMEOUT}) {
   try {
-    validateRpcInput({type, resolve, reject, data, timeout})
+    validateRpcInput({topic, resolve, reject, data, timeout})
     let timedout = false
     const timer = setTimeout(function () {
       timedout = true
-      reject(new Error(`RPC for ${type} using ${data} timed out after ${timeout}ms`))
+      reject(new Error(`RPC for ${topic} using ${data} timed out after ${timeout}ms`))
     }, timeout)
     const done = (args) => {
       clearTimeout(timer)
@@ -80,14 +80,14 @@ export function rpc ({type, data, resolve, reject, timeout = DEFAULT_TIMEOUT}) {
         resolve(args)
       }
     }
-    once(type, done)
-    emit(type, data)
+    once(topic, done)
+    emit(topic, data)
   } catch (e) {
     reject(e)
   }
 }
-function onNative ({detail: {type, data}}) {
-  (events[type] || []).forEach((handler) => handler(data))
+function onNative ({detail: {topic, data}}) {
+  (events[topic] || []).forEach((handler) => handler(data))
 }
 
 export function setupNativeLink () {
@@ -95,11 +95,11 @@ export function setupNativeLink () {
 }
 
 export function destroy () {
-  Object.keys(events).forEach((type) => {
-    Object.keys(events[type]).forEach((handler) => {
-      delete events[type][handler]
+  Object.keys(events).forEach((topic) => {
+    Object.keys(events[topic]).forEach((handler) => {
+      delete events[topic][handler]
     })
-    delete events[type]
+    delete events[topic]
   })
   if (typeof window !== 'undefined') {
     window.removeEventListener('nativebridge', onNative)

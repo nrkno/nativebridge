@@ -90,21 +90,21 @@ var simulationCb = document.getElementById('simulation');
 var output = document.getElementById('output');
 console.log('nativebridge:', bridge);
 
-var dispatchCustomEvent = function dispatchCustomEvent(type, data) {
-  window.dispatchEvent(new window.CustomEvent('nativebridge', { detail: { type: type, data: data } }));
+var dispatchCustomEvent = function dispatchCustomEvent(topic, data) {
+  window.dispatchEvent(new window.CustomEvent('nativebridge', { detail: { topic: topic, data: data } }));
 };
 
 var backup = window.webkit;
 
 // mocked (injected) iOs handler
 function postMessage(_ref) {
-  var type = _ref.type,
+  var topic = _ref.topic,
       data = _ref.data;
 
   if (window.webkit !== backup) {
-    if (type === 'gaConf') {
+    if (topic === 'gaConf') {
       data.cid = 'MOCK_CID';
-    } else if (type === 'test') {
+    } else if (topic === 'test') {
       data.echo = true;
     } else {
       data = {
@@ -113,7 +113,7 @@ function postMessage(_ref) {
     }
     data.simulation = true;
   }
-  dispatchCustomEvent(type, data);
+  dispatchCustomEvent(topic, data);
 }
 
 function setupSimulator() {
@@ -136,16 +136,16 @@ button.addEventListener('click', function (event) {
   setupSimulator();
 
   var _JSON$parse = JSON.parse(payloadArea.innerHTML),
-      type = _JSON$parse.type,
+      topic = _JSON$parse.topic,
       data = _JSON$parse.data;
 
   var cb = function cb(payload) {
-    bridge.off(type, cb);
+    bridge.off(topic, cb);
     var json = JSON.stringify(payload, null, '  ');
     output.insertAdjacentHTML('afterbegin', '<pre>' + counter++ + ' - From native: ' + json + ' </pre>');
   };
-  bridge.on(type, cb);
-  bridge.emit(type, data);
+  bridge.on(topic, cb);
+  bridge.emit(topic, data);
 });
 
 clearButton.addEventListener('click', function (event) {

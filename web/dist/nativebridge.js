@@ -97,29 +97,29 @@ exports.destroy = destroy;
 var DEFAULT_TIMEOUT = 1000;
 var events = exports.events = {};
 
-function on(type, handler) {
-  if (typeof type !== 'string') {
-    throw new Error('type must be a string');
+function on(topic, handler) {
+  if (typeof topic !== 'string') {
+    throw new Error('topic must be a string');
   }
   if (typeof handler !== 'function') {
-    throw new Error('Handler must be of type function');
+    throw new Error('Handler must be of topic function');
   }
-  (events[type] = events[type] || []).push(handler);
+  (events[topic] = events[topic] || []).push(handler);
 }
 
-function off(type, handler) {
-  if (typeof type !== 'string') {
-    throw new Error('type must be a string');
+function off(topic, handler) {
+  if (typeof topic !== 'string') {
+    throw new Error('topic must be a string');
   }
-  events[type] = (events[type] || []).filter(function (fn) {
+  events[topic] = (events[topic] || []).filter(function (fn) {
     return handler && fn !== handler;
   });
-  if (events[type].length === 0) {
-    delete events[type];
+  if (events[topic].length === 0) {
+    delete events[topic];
   }
 }
 
-function once(type, handler) {
+function once(topic, handler) {
   if (typeof type !== 'string') {
     throw new Error('type must be a string');
   }
@@ -127,33 +127,33 @@ function once(type, handler) {
     throw new Error('Handler must be of type function');
   }
   var newHandler = function newHandler() {
-    off(type, newHandler);
+    off(topic, newHandler);
     handler.apply(undefined, arguments);
   };
-  on(type, newHandler);
+  on(topic, newHandler);
 }
 
-function emit(type) {
+function emit(topic) {
   var data = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
 
   if (window.webkit && window.webkit.messageHandlers) {
-    window.webkit.messageHandlers.nativebridgeiOS.postMessage({ type: type, data: data });
+    window.webkit.messageHandlers.nativebridgeiOS.postMessage({ topic: topic, data: data });
   } else if (window.NativeBridgeAndroid) {
-    window.NativeBridgeAndroid.send(JSON.stringify({ type: type, data: data }));
+    window.NativeBridgeAndroid.send(JSON.stringify({ topic: topic, data: data }));
   } else {
     throw new Error('No native bridge defined');
   }
 }
 
 function validateRpcInput(_ref) {
-  var type = _ref.type,
+  var topic = _ref.topic,
       data = _ref.data,
       resolve = _ref.resolve,
       reject = _ref.reject,
       timeout = _ref.timeout;
 
-  if (typeof type !== 'string') {
-    throw TypeError('type argument must be a String');
+  if (typeof topic !== 'string') {
+    throw TypeError('topic argument must be a String');
   }
   if (data === null || (typeof data === 'undefined' ? 'undefined' : _typeof(data)) !== 'object') {
     throw TypeError('data argument must be an Object');
@@ -171,7 +171,7 @@ function validateRpcInput(_ref) {
 }
 
 function rpc(_ref2) {
-  var type = _ref2.type,
+  var topic = _ref2.topic,
       data = _ref2.data,
       resolve = _ref2.resolve,
       reject = _ref2.reject,
@@ -179,11 +179,11 @@ function rpc(_ref2) {
       timeout = _ref2$timeout === undefined ? DEFAULT_TIMEOUT : _ref2$timeout;
 
   try {
-    validateRpcInput({ type: type, resolve: resolve, reject: reject, data: data, timeout: timeout });
+    validateRpcInput({ topic: topic, resolve: resolve, reject: reject, data: data, timeout: timeout });
     var timedout = false;
     var timer = setTimeout(function () {
       timedout = true;
-      reject(new Error('RPC for ' + type + ' using ' + data + ' timed out after ' + timeout + 'ms'));
+      reject(new Error('RPC for ' + topic + ' using ' + data + ' timed out after ' + timeout + 'ms'));
     }, timeout);
     var done = function done(args) {
       clearTimeout(timer);
@@ -193,18 +193,18 @@ function rpc(_ref2) {
         resolve(args);
       }
     };
-    once(type, done);
-    emit(type, data);
+    once(topic, done);
+    emit(topic, data);
   } catch (e) {
     reject(e);
   }
 }
 function onNative(_ref3) {
   var _ref3$detail = _ref3.detail,
-      type = _ref3$detail.type,
+      topic = _ref3$detail.topic,
       data = _ref3$detail.data;
 
-  (events[type] || []).forEach(function (handler) {
+  (events[topic] || []).forEach(function (handler) {
     return handler(data);
   });
 }
@@ -214,11 +214,11 @@ function setupNativeLink() {
 }
 
 function destroy() {
-  Object.keys(events).forEach(function (type) {
-    Object.keys(events[type]).forEach(function (handler) {
-      delete events[type][handler];
+  Object.keys(events).forEach(function (topic) {
+    Object.keys(events[topic]).forEach(function (handler) {
+      delete events[topic][handler];
     });
-    delete events[type];
+    delete events[topic];
   });
   if (typeof window !== 'undefined') {
     window.removeEventListener('nativebridge', onNative);

@@ -7,18 +7,18 @@ const simulationCb = document.getElementById('simulation')
 const output = document.getElementById('output')
 console.log('nativebridge:', bridge)
 
-const dispatchCustomEvent = (type, data) => {
-  window.dispatchEvent(new window.CustomEvent('nativebridge', {detail: {type, data}}))
+const dispatchCustomEvent = (topic, data) => {
+  window.dispatchEvent(new window.CustomEvent('nativebridge', {detail: {topic, data}}))
 }
 
 const backup = window.webkit
 
 // mocked (injected) iOs handler
-function postMessage ({type, data}) {
+function postMessage ({topic, data}) {
   if (window.webkit !== backup) {
-    if (type === 'gaConf') {
+    if (topic === 'gaConf') {
       data.cid = 'MOCK_CID'
-    } else if (type === 'test') {
+    } else if (topic === 'test') {
       data.echo = true
     } else {
       data = {
@@ -27,7 +27,7 @@ function postMessage ({type, data}) {
     }
     data.simulation = true
   }
-  dispatchCustomEvent(type, data)
+  dispatchCustomEvent(topic, data)
 }
 
 function setupSimulator () {
@@ -44,15 +44,15 @@ bridge.on('error', (...args) => {
 
 button.addEventListener('click', function (event) {
   setupSimulator()
-  const {type, data} = JSON.parse(payloadArea.innerHTML)
+  const {topic, data} = JSON.parse(payloadArea.innerHTML)
 
   const cb = function (payload) {
-    bridge.off(type, cb)
+    bridge.off(topic, cb)
     var json = JSON.stringify(payload, null, '  ')
     output.insertAdjacentHTML('afterbegin', `<pre>${counter++} - From native: ${json} </pre>`)
   }
-  bridge.on(type, cb)
-  bridge.emit(type, data)
+  bridge.on(topic, cb)
+  bridge.emit(topic, data)
 })
 
 clearButton.addEventListener('click', function (event) {

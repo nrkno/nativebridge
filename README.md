@@ -36,13 +36,13 @@ nativebridge.off('test')                    // Unbind all handlers for 'test' ev
 nativebridge.off('test', (data) => {})      // Unbind specific handler for 'test' event
 ```
 
-##### RPC: - *make call to native app using type as contract*
+##### RPC: - *make call to native app using topic as contract*
 Make a remote procedure call (RPC) using nativebridge interfaces as described above.
 Resolves with data on completion, or rejects with error details from the app (or timeout).
 ```js
 // Auto-bind handlers (once/emit) to complete an RPC-call to native
 nativeBridge.rpc({                          
-  type: 'test',                             // using 'test' as event
+  topic: 'test',                             // using 'test' as event
   data: {},                                 // with data (args)
   resolve: (data) => {},                    // using callback on success
   reject: (err) => {},                      // or rejection on error
@@ -89,9 +89,9 @@ private class nativebridgeAndroid {
   }
 
   // Send to webview
-  fun emit(type: String, data: Object) {
+  fun emit(topic: String, data: Object) {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-      var event = JSON.stringify({detail: {type, data}})
+      var event = JSON.stringify({detail: {topic, data}})
       webView?.loadUrl("javascript:window.dispatchEvent(new CustomEvent('nativebridge', ' + event + ' ))")
     }
   }
@@ -120,18 +120,18 @@ webView.evaluateJavaScript("window.dispatchEvent(new CustomEvent('nativebridge',
 ## How does it work
 
 ##### Emit
-A data object is sent using `type` as topic to an exposed method on either:
+A data object is sent using `topic` as topic to an exposed method on either:
 - *iOs*:
-`window.webkit.messageHandlers.nativebridgeiOS.postMessage({type: "test", data: {foo: "bar"}})`
+`window.webkit.messageHandlers.nativebridgeiOS.postMessage({topic: "test", data: {foo: "bar"}})`
 - or *Android*:
-`window.NativeBridgeAndroid.send(JSON.stringify({type: "test", data: {foo: "bar"}}))`
+`window.NativeBridgeAndroid.send(JSON.stringify({topic: "test", data: {foo: "bar"}}))`
 
 ##### iOs/Android handler
-Type-handlers are mapped to native functions, using data-object as an argument e.g `typeHandler({type: "test", data: {foo: "bar"}})`. The app injects a js-snippet to dispatch a message back to the webpage using CustomEvents
-`window.dispatchEvent(new CustomEvent('nativebridge', { detail: {type, data} }))`
+Topic-handlers are mapped to native functions, using data-object as an argument e.g `topicHandler({topic: "test", data: {foo: "bar"}})`. The app injects a js-snippet to dispatch a message back to the webpage using CustomEvents
+`window.dispatchEvent(new CustomEvent('nativebridge', { detail: {topic, data} }))`
 
 ##### On
-The CustomEvent dispatched from the native app is ran using attached callback-handlers on the given type.
+The CustomEvent dispatched from the native app is ran using attached callback-handlers on the given topic.
 
 ##### Error handling
 If an error occurs in the native app, an Error object will be rejected, eg.

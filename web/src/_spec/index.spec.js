@@ -7,7 +7,7 @@ const PING = 'ping'
 const PONG = 'pong'
 
 const SIMULATED_EXEC_TIME = 10
-const MOCK_TYPE = 'MOCK_TYPE'
+const MOCK_TOPIC = 'MOCK_TOPIC'
 const WEBKIT = 'webkit'
 const ANDROID = 'android'
 
@@ -20,28 +20,28 @@ const getMockDOM = () => new JSDOM(`
 </html>
 `)
 
-const dispatchCustomEvent = (type, data) => {
-  window.dispatchEvent(new window.CustomEvent('nativebridge', {detail: {type, data}}))
+const dispatchCustomEvent = (topic, data) => {
+  window.dispatchEvent(new window.CustomEvent('nativebridge', {detail: {topic, data}}))
 }
 
 // mocked (injected) iOs handler
 const postMessage = (args) => {
-  expect(args).to.have.keys('type', 'data')
-  const {type, data} = args
-  if (type === 'string') {
+  expect(args).to.have.keys('topic', 'data')
+  const {topic, data} = args
+  if (topic === 'string') {
     expect(data).to.be.a('string')
-    dispatchCustomEvent(type, PONG)
-  } else if (type === 'object') {
+    dispatchCustomEvent(topic, PONG)
+  } else if (topic === 'object') {
     expect(data).to.be.an('object')
-    dispatchCustomEvent(type, {test: PONG})
-  } else if (type === 'array') {
+    dispatchCustomEvent(topic, {test: PONG})
+  } else if (topic === 'array') {
     expect(data).to.be.an('array')
-    dispatchCustomEvent(type, [PONG, {test: PONG}])
-  } else if (type === 'N/A') {
-    dispatchCustomEvent(type, {errors: {message: 'fail', errorCode: 123}})
-  } else if (type === MOCK_TYPE) {
+    dispatchCustomEvent(topic, [PONG, {test: PONG}])
+  } else if (topic === 'N/A') {
+    dispatchCustomEvent(topic, {errors: {message: 'fail', errorCode: 123}})
+  } else if (topic === MOCK_TOPIC) {
     setTimeout(() => {
-      dispatchCustomEvent(type, {MOCK_TYPE})
+      dispatchCustomEvent(topic, {MOCK_TOPIC})
     }, SIMULATED_EXEC_TIME)
   }
 }
@@ -86,16 +86,16 @@ describe('on', () => {
     nativeBridge.destroy()
   })
 
-  it('should attach handler for type', () => {
+  it('should attach handler for topic', () => {
     nativeBridge.on('test', () => {})
     expect(nativeBridge.events).to.have.keys(['test'])
   })
 
-  it('should should throw if type is missing', () => {
+  it('should should throw if topic is missing', () => {
     expect(nativeBridge.on).withArgs(null, () => {}).to.throwError()
   })
 
-  it('should should throw if type has wrong type', () => {
+  it('should should throw if topic has wrong type', () => {
     expect(nativeBridge.on).withArgs({}, () => {}).to.throwError()
   })
 
@@ -109,14 +109,14 @@ describe('off', () => {
     nativeBridge.destroy()
   })
 
-  it('should remove all handlers for type', () => {
+  it('should remove all handlers for topic', () => {
     nativeBridge.on('test', () => {})
     nativeBridge.on('test', () => {})
     nativeBridge.off('test')
     expect(nativeBridge.events['test']).to.be.an('undefined')
   })
 
-  it('should remove specific handler for type', () => {
+  it('should remove specific handler for topic', () => {
     const cb = () => {}
     nativeBridge.on('test', cb)
     nativeBridge.on('test', () => {})
@@ -125,11 +125,11 @@ describe('off', () => {
     expect(nativeBridge.events['test'].length).equal(1)
   })
 
-  it('should should throw if type is missing', () => {
+  it('should should throw if topic is missing', () => {
     expect(nativeBridge.off).withArgs().to.throwError()
   })
 
-  it('should should throw if type has wrong type', () => {
+  it('should should throw if topic has wrong type', () => {
     expect(nativeBridge.off).withArgs({}).to.throwError()
   })
 })
@@ -145,7 +145,7 @@ describe('once', () => {
     expect(nativeBridge.events['test']).to.be.an('undefined')
   })
 
-  it('should should throw if type is missing', () => {
+  it('should should throw if topic is missing', () => {
     expect(nativeBridge.once).withArgs().to.throwError()
   })
 
@@ -157,7 +157,7 @@ describe('once', () => {
     expect(nativeBridge.once).withArgs('test', {}).to.throwError()
   })
 
-  it('should should throw if type has wrong type', () => {
+  it('should should throw if topic has wrong type', () => {
     expect(nativeBridge.once).withArgs({}).to.throwError()
   })
 })
@@ -177,7 +177,7 @@ describe('emit', () => {
     nativeBridge.emit('test', {})
     expect(spy.called).to.equal(true)
     // first call, first argument
-    expect(spy.args[0][0]).to.eql({type: 'test', data: {}})
+    expect(spy.args[0][0]).to.eql({topic: 'test', data: {}})
     delete global.window
   })
 
@@ -191,7 +191,7 @@ describe('emit', () => {
     nativeBridge.emit('test', {})
     expect(spy.called).to.equal(true)
     // first call, first argument
-    expect(spy.args[0][0]).to.equal(JSON.stringify({type: 'test', data: {}}))
+    expect(spy.args[0][0]).to.equal(JSON.stringify({topic: 'test', data: {}}))
     delete global.window
   })
 
@@ -199,11 +199,11 @@ describe('emit', () => {
     expect(nativeBridge.emit).withArgs('test', {}).to.throwError()
   })
 
-  it('should throw if type is missing', () => {
+  it('should throw if topic is missing', () => {
     expect(nativeBridge.emit).withArgs().to.throwError()
   })
 
-  it('should throw if type has wrong type', () => {
+  it('should throw if topic has wrong type', () => {
     expect(nativeBridge.emit).withArgs({}).to.throwError()
   })
 })
@@ -297,10 +297,10 @@ describe('nativebridge unit test suite', () => {
 
     it('should respond using simulated native', (done) => {
       nativeBridge.rpc({
-        type: MOCK_TYPE,
+        topic: MOCK_TOPIC,
         data: {},
         resolve: (data) => {
-          expect(data).to.eql({MOCK_TYPE})
+          expect(data).to.eql({MOCK_TOPIC})
           done()
         },
         reject: () => {}
@@ -309,7 +309,7 @@ describe('nativebridge unit test suite', () => {
 
     it('should reject when timeout is reached', (done) => {
       nativeBridge.rpc({
-        type: MOCK_TYPE,
+        topic: MOCK_TOPIC,
         data: {},
         resolve: () => {},
         reject: (err) => {
@@ -322,7 +322,7 @@ describe('nativebridge unit test suite', () => {
 
     it('should reject when an error-type is returned', (done) => {
       nativeBridge.rpc({
-        type: 'N/A',
+        topic: 'N/A',
         data: {},
         resolve: () => {},
         reject: (err) => {
@@ -334,14 +334,14 @@ describe('nativebridge unit test suite', () => {
   })
 
   describe('validateRpcInput', () => {
-    let type
+    let topic
     let data
     let resolve
     let reject
     let timeout
 
     beforeEach(() => {
-      type = 'rpcMethod'
+      topic = 'rpcMethod'
       data = {}
       resolve = () => {}
       reject = () => {}
@@ -349,77 +349,77 @@ describe('nativebridge unit test suite', () => {
     })
 
     it('should not throw if valid input arguments are used', () => {
-      expect(nativeBridge.validateRpcInput({type, data, resolve, reject, timeout})).to.equal(true)
+      expect(nativeBridge.validateRpcInput({topic, data, resolve, reject, timeout})).to.equal(true)
     })
 
-    it('should throw if invalid type (number) argument is used', () => {
-      type = 123
-      expect(nativeBridge.validateRpcInput).withArgs({type, data, resolve, reject, timeout}).to.throwError()
+    it('should throw if invalid topic (number) argument is used', () => {
+      topic = 123
+      expect(nativeBridge.validateRpcInput).withArgs({topic, data, resolve, reject, timeout}).to.throwError()
     })
 
-    it('should throw if invalid type (null) argument is used', () => {
-      type = null
-      expect(nativeBridge.validateRpcInput).withArgs({type, data, resolve, reject, timeout}).to.throwError()
+    it('should throw if invalid topic (null) argument is used', () => {
+      topic = null
+      expect(nativeBridge.validateRpcInput).withArgs({topic, data, resolve, reject, timeout}).to.throwError()
     })
 
-    it('should throw if invalid type (object) argument is used', () => {
-      type = {}
-      expect(nativeBridge.validateRpcInput).withArgs({type, data, resolve, reject, timeout}).to.throwError()
+    it('should throw if invalid topic (object) argument is used', () => {
+      topic = {}
+      expect(nativeBridge.validateRpcInput).withArgs({topic, data, resolve, reject, timeout}).to.throwError()
     })
 
     it('should throw if invalid data (string) argument is used', () => {
       data = 'data'
-      expect(nativeBridge.validateRpcInput).withArgs({type, data, resolve, reject, timeout}).to.throwError()
+      expect(nativeBridge.validateRpcInput).withArgs({topic, data, resolve, reject, timeout}).to.throwError()
     })
 
     it('should throw if invalid data (null) argument is used', () => {
       data = null
-      expect(nativeBridge.validateRpcInput).withArgs({type, data, resolve, reject, timeout}).to.throwError()
+      expect(nativeBridge.validateRpcInput).withArgs({topic, data, resolve, reject, timeout}).to.throwError()
     })
 
     it('should throw if invalid data (number) argument is used', () => {
       data = 123
-      expect(nativeBridge.validateRpcInput).withArgs({type, data, resolve, reject, timeout}).to.throwError()
+      expect(nativeBridge.validateRpcInput).withArgs({topic, data, resolve, reject, timeout}).to.throwError()
     })
 
     it('should throw if invalid resolve (number) argument is used', () => {
       resolve = 123
-      expect(nativeBridge.validateRpcInput).withArgs({type, data, resolve, reject, timeout}).to.throwError()
+      expect(nativeBridge.validateRpcInput).withArgs({topic, data, resolve, reject, timeout}).to.throwError()
     })
 
     it('should throw if invalid resolve (undefined) argument is used', () => {
       resolve = undefined
-      expect(nativeBridge.validateRpcInput).withArgs({type, data, resolve, reject, timeout}).to.throwError()
+      expect(nativeBridge.validateRpcInput).withArgs({topic, data, resolve, reject, timeout}).to.throwError()
     })
 
     it('should throw if invalid reject (number) argument is used', () => {
       reject = 123
-      expect(nativeBridge.validateRpcInput).withArgs({type, data, resolve, reject, timeout}).to.throwError()
+      expect(nativeBridge.validateRpcInput).withArgs({topic, data, resolve, reject, timeout}).to.throwError()
     })
 
     it('should throw if invalid reject (undefined) argument is used', () => {
       reject = undefined
-      expect(nativeBridge.validateRpcInput).withArgs({type, data, resolve, reject, timeout}).to.throwError()
+      expect(nativeBridge.validateRpcInput).withArgs({topic, data, resolve, reject, timeout}).to.throwError()
     })
 
     it('should throw if invalid reject (undefined) argument is used', () => {
       reject = {}
-      expect(nativeBridge.validateRpcInput).withArgs({type, data, resolve, reject, timeout}).to.throwError()
+      expect(nativeBridge.validateRpcInput).withArgs({topic, data, resolve, reject, timeout}).to.throwError()
     })
 
     it('should throw if invalid timeout (string) argument is used', () => {
       timeout = '123'
-      expect(nativeBridge.validateRpcInput).withArgs({type, data, resolve, reject, timeout}).to.throwError()
+      expect(nativeBridge.validateRpcInput).withArgs({topic, data, resolve, reject, timeout}).to.throwError()
     })
 
     it('should throw if invalid timeout (null) argument is used', () => {
       timeout = null
-      expect(nativeBridge.validateRpcInput).withArgs({type, data, resolve, reject, timeout}).to.throwError()
+      expect(nativeBridge.validateRpcInput).withArgs({topic, data, resolve, reject, timeout}).to.throwError()
     })
 
     it('should throw if invalid timeout (object) argument is used', () => {
       timeout = {}
-      expect(nativeBridge.validateRpcInput).withArgs({type, data, resolve, reject, timeout}).to.throwError()
+      expect(nativeBridge.validateRpcInput).withArgs({topic, data, resolve, reject, timeout}).to.throwError()
     })
   })
 })
