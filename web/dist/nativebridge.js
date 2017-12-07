@@ -120,7 +120,7 @@ function off(topic, handler) {
 }
 
 function once(topic, handler) {
-  if (typeof type !== 'string') {
+  if (typeof topic !== 'string') {
     throw new Error('type must be a string');
   }
   if (typeof handler !== 'function') {
