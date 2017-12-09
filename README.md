@@ -53,19 +53,19 @@ nativeBridge.rpc({
 ### Installation
 
 ##### USE WITH NPM:
-```
+```bash
 npm install @nrk/nativebridge --save
 ```
-```
+```js
 import nativebridge from '@nrk/nativebridge'
 ```
 ##### USE WITH SCRIPT TAG:
-```
+```html
 <script src="https://static.nrk.no/nativebridge/X.X.X/nativebridge.min.js"></script>
 <!-- window.nativebridge is now defined -->
 ```
 ##### USE WITH REQUIRE.JS:
-```
+```js
 require(['https://static.nrk.no/nativebridge/X.X.X/nativebridge.min.js'], function(nativebridge) {
   /* code here */
 });
@@ -77,27 +77,35 @@ require(['https://static.nrk.no/nativebridge/X.X.X/nativebridge.min.js'], functi
 
 ##### Emit
 A data object is sent using `topic` as topic to an exposed method on either:
-- *iOs*:
-`window.webkit.messageHandlers.nativebridgeiOS.postMessage({topic: "test", data: {foo: "bar"}})`
-- or *Android*:
-`window.NativeBridgeAndroid.send(JSON.stringify({topic: "test", data: {foo: "bar"}}))`
+- *Android*:
+```js
+window.webkit.messageHandlers.nativebridgeiOS.postMessage({topic: "test", data: {foo: "bar"}})
+```
+- *iOS*:
+```js
+window.NativeBridgeAndroid.send(JSON.stringify({topic: "test", data: {foo: "bar"}}))
+```
 
-##### iOs/Android handler
-Topic-handlers are mapped to native functions, using data-object as an argument e.g `topicHandler({topic: "test", data: {foo: "bar"}})`. The app injects a js-snippet to dispatch a message back to the webpage using CustomEvents
-`window.dispatchEvent(new CustomEvent('nativebridge', { detail: {topic, data} }))`
+##### Android/iOS handler
+Topic-handlers are mapped to native functions, using data-object as an argument e.g `topicHandler({topic: "test", data: {foo: "bar"}})`. The app injects a js-snippet to dispatch a message back to the webpage using CustomEvents:
+```javascript
+window.dispatchEvent(new CustomEvent('nativebridge', { detail: {topic, data} }))
+```
 
 ##### On
 The CustomEvent dispatched from the native app is ran using attached callback-handlers on the given topic.
 
 ##### Error handling
 If an error occurs in the native app, an Error object will be rejected, eg.
-`err.message = '[{message: "no handler available", errorCode: 100}]'`
+```js
+err.message = '[{message: "no handler available", errorCode: 100}]'
+```
 
 ##### RPC
 The RPC-method is made to simplify on/off/emit-logistics. In addition it supports a timeout, which will throw an error if timeout is reached:
-`err.message = 'RPC for test using {} timed out after 1000ms'`
-
-
+```js
+err.message = 'RPC for test using {} timed out after 1000ms'
+```
 ---
 
 ## Local development (web)
