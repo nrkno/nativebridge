@@ -4,14 +4,14 @@
 > Primary use case is for sharing state.
 
 - [Browser documentation](#browser)
-- [Android documentation](#android)
-- [iOS documentation](#ios)
+- [Android documentation](https://github.com/nrkno/nativebridge-android)
+- [iOS documentation](https://github.com/nrkno/nativebridge-android)
 - [How does it work](#how-does-it-work)
 
 ## Support
 ![iOS](https://cdnjs.cloudflare.com/ajax/libs/browser-logos/42.7.1/archive/safari-ios_1-6/safari-ios_1-6_24x24.png) | ![Android](https://cdnjs.cloudflare.com/ajax/libs/browser-logos/42.7.1/android/android_24x24.png)
 --- | ---
-iOS 10.2+ | Android 4.4.4+
+iOS 10.2+ | Tested on Android 4.4.4+
 
 ---
 
@@ -70,49 +70,6 @@ import nativebridge from '@nrk/nativebridge'
 require(['https://static.nrk.no/nativebridge/X.X.X/nativebridge.min.js'], function(nativebridge) {
   /* code here */
 });
-```
-
----
-
-## Android
-
-Describe usage here
-
-##### EXAMPLE:
-```java
-private class nativebridgeAndroid {
-  @JavascriptInterface
-
-  // Receives from webview
-  fun on(json: String){
-    Log.d("WebViewBridgeTest", "Called from web " + json)
-  }
-
-  // Send to webview
-  fun emit(topic: String, data: Object) {
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-      var event = JSON.stringify({detail: {topic, data}})
-      webView?.loadUrl("javascript:window.dispatchEvent(new CustomEvent('nativebridge', ' + event + ' ))")
-    }
-  }
-}
-
-// Add interface to webview
-webView.addJavascriptInterface(new nativebridgeAndroid(), "interface");
-```
-
----
-
-## iOS
-
-Describe usage here
-
-##### EXAMPLE:
-
-```swift
-webView.evaluateJavaScript("window.dispatchEvent(new CustomEvent('nativebridge', { detail: \(object) }))") {
-  (value, error) in
-})
 ```
 
 ---
