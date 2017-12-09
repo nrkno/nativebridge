@@ -8,7 +8,7 @@ Native Bridge is a lightweight and efficient bridge between webview and native a
 - [How does it work](#how-does-it-work)
 
 ## Support
-![iOS](https://cdnjs.cloudflare.com/ajax/libs/browser-logos/42.7.1/archive/safari-ios_1-6/safari-ios_1-6_24x24.png) | ![Android](https://cdnjs.cloudflare.com/ajax/libs/browser-logos/42.7.1/android/android_24x24.png)
+![Android](https://cdnjs.cloudflare.com/ajax/libs/browser-logos/42.7.1/android/android_24x24.png)|![iOS](https://cdnjs.cloudflare.com/ajax/libs/browser-logos/42.7.1/archive/safari-ios_1-6/safari-ios_1-6_24x24.png)
 --- | ---
 Tested on Android 4.4.4+ | iOS 10.2+
 
