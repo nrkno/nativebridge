@@ -4,7 +4,7 @@ Native Bridge is a lightweight and efficient bridge between webview and native a
 
 - [Browser documentation](#browser)
 - [Android documentation](https://github.com/nrkno/nativebridge-android)
-- [iOS documentation](https://github.com/nrkno/nativebridge-android)
+- [iOS documentation](https://github.com/nrkno/nativebridge-ios)
 - [How does it work](#how-does-it-work)
 
 ## Support
