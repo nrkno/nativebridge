@@ -1,17 +1,16 @@
 # @nrk/nativebridge
 
-> Lightweight and efficient bridge between webview and native app.
-> Primary use case is for sharing state.
+Native Bridge is a lightweight and efficient bridge between webview and native app. It's primary use case is to share state between native apps and javascript in webviews.
 
 - [Browser documentation](#browser)
-- [Android documentation](#android)
-- [iOS documentation](#ios)
+- [Android documentation](https://github.com/nrkno/nativebridge-android)
+- [iOS documentation](https://github.com/nrkno/nativebridge-ios)
 - [How does it work](#how-does-it-work)
 
 ## Support
-![iOS](https://cdnjs.cloudflare.com/ajax/libs/browser-logos/42.7.1/archive/safari-ios_1-6/safari-ios_1-6_24x24.png) | ![Android](https://cdnjs.cloudflare.com/ajax/libs/browser-logos/42.7.1/android/android_24x24.png)
+![Android](https://cdnjs.cloudflare.com/ajax/libs/browser-logos/42.7.1/android/android_24x24.png)|![iOS](https://cdnjs.cloudflare.com/ajax/libs/browser-logos/42.7.1/archive/safari-ios_1-6/safari-ios_1-6_24x24.png)
 --- | ---
-iOS 10.2+ | Android 4.4.4+
+Tested on Android 4.4.4+ | iOS 10.2+
 
 ---
 
@@ -54,65 +53,22 @@ nativeBridge.rpc({
 ### Installation
 
 ##### USE WITH NPM:
-```
+```bash
 npm install @nrk/nativebridge --save
 ```
-```
+```js
 import nativebridge from '@nrk/nativebridge'
 ```
 ##### USE WITH SCRIPT TAG:
-```
+```html
 <script src="https://static.nrk.no/nativebridge/X.X.X/nativebridge.min.js"></script>
 <!-- window.nativebridge is now defined -->
 ```
 ##### USE WITH REQUIRE.JS:
-```
+```js
 require(['https://static.nrk.no/nativebridge/X.X.X/nativebridge.min.js'], function(nativebridge) {
   /* code here */
 });
-```
-
----
-
-## Android
-
-Describe usage here
-
-##### EXAMPLE:
-```java
-private class nativebridgeAndroid {
-  @JavascriptInterface
-
-  // Receives from webview
-  fun on(json: String){
-    Log.d("WebViewBridgeTest", "Called from web " + json)
-  }
-
-  // Send to webview
-  fun emit(topic: String, data: Object) {
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-      var event = JSON.stringify({detail: {topic, data}})
-      webView?.loadUrl("javascript:window.dispatchEvent(new CustomEvent('nativebridge', ' + event + ' ))")
-    }
-  }
-}
-
-// Add interface to webview
-webView.addJavascriptInterface(new nativebridgeAndroid(), "interface");
-```
-
----
-
-## iOS
-
-Describe usage here
-
-##### EXAMPLE:
-
-```swift
-webView.evaluateJavaScript("window.dispatchEvent(new CustomEvent('nativebridge', { detail: \(object) }))") {
-  (value, error) in
-})
 ```
 
 ---
@@ -121,27 +77,35 @@ webView.evaluateJavaScript("window.dispatchEvent(new CustomEvent('nativebridge',
 
 ##### Emit
 A data object is sent using `topic` as topic to an exposed method on either:
-- *iOs*:
-`window.webkit.messageHandlers.nativebridgeiOS.postMessage({topic: "test", data: {foo: "bar"}})`
-- or *Android*:
-`window.NativeBridgeAndroid.send(JSON.stringify({topic: "test", data: {foo: "bar"}}))`
+- *Android*:
+```js
+window.webkit.messageHandlers.nativebridgeiOS.postMessage({topic: "test", data: {foo: "bar"}})
+```
+- *iOS*:
+```js
+window.NativeBridgeAndroid.send(JSON.stringify({topic: "test", data: {foo: "bar"}}))
+```
 
-##### iOs/Android handler
-Topic-handlers are mapped to native functions, using data-object as an argument e.g `topicHandler({topic: "test", data: {foo: "bar"}})`. The app injects a js-snippet to dispatch a message back to the webpage using CustomEvents
-`window.dispatchEvent(new CustomEvent('nativebridge', { detail: {topic, data} }))`
+##### Android/iOS handler
+Topic-handlers are mapped to native functions, using data-object as an argument e.g `topicHandler({topic: "test", data: {foo: "bar"}})`. The app injects a js-snippet to dispatch a message back to the webpage using CustomEvents:
+```javascript
+window.dispatchEvent(new CustomEvent('nativebridge', { detail: {topic, data} }))
+```
 
 ##### On
 The CustomEvent dispatched from the native app is ran using attached callback-handlers on the given topic.
 
 ##### Error handling
 If an error occurs in the native app, an Error object will be rejected, eg.
-`err.message = '[{message: "no handler available", errorCode: 100}]'`
+```js
+err.message = '[{message: "no handler available", errorCode: 100}]'
+```
 
 ##### RPC
 The RPC-method is made to simplify on/off/emit-logistics. In addition it supports a timeout, which will throw an error if timeout is reached:
-`err.message = 'RPC for test using {} timed out after 1000ms'`
-
-
+```js
+err.message = 'RPC for test using {} timed out after 1000ms'
+```
 ---
 
 ## Local development (web)
