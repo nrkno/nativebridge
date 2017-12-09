@@ -1,7 +1,6 @@
 # @nrk/nativebridge
 
-> Lightweight and efficient bridge between webview and native app.
-> Primary use case is for sharing state.
+Native Bridge is a lightweight and efficient bridge between webview and native app. It's primary use case is to share state between native apps and javascript in webviews.
 
 - [Browser documentation](#browser)
 - [Android documentation](https://github.com/nrkno/nativebridge-android)
@@ -11,7 +10,7 @@
 ## Support
 ![iOS](https://cdnjs.cloudflare.com/ajax/libs/browser-logos/42.7.1/archive/safari-ios_1-6/safari-ios_1-6_24x24.png) | ![Android](https://cdnjs.cloudflare.com/ajax/libs/browser-logos/42.7.1/android/android_24x24.png)
 --- | ---
-iOS 10.2+ | Tested on Android 4.4.4+
+Tested on Android 4.4.4+ | iOS 10.2+
 
 ---
 
