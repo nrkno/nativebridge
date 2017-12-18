@@ -113,7 +113,7 @@ First clone `@nrk/nativebridge` and install its dependencies:
 
 ```bash
 git clone git@github.com:nrkno/nativebridge.git
-cd nativebridge/web
+cd nativebridge
 npm install && npm start
 ```
 
