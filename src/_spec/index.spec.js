@@ -62,8 +62,8 @@ const mockDom = () => {
 
 const teardownDom = () => {
   nativeBridge.destroy()
-  delete global.window
-  delete global.document
+  // delete global.window // Let window live after timeout
+  // delete global.document // Let window live after timeout
 }
 
 const setupSimulator = (simulator) => {

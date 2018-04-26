@@ -1,10 +1,9 @@
 const path = require('path')
-const webpack = require('webpack')
 const yargs = require('yargs').argv
-
 const watch = yargs.watch
 
 module.exports = {
+  mode: 'production',
   devtool: 'source-map',
   context: path.resolve(__dirname, 'src'),
   entry: {
@@ -33,12 +32,6 @@ module.exports = {
     contentBase: [path.join(__dirname, 'src')],
     headers: {'Content-Security-Policy': `default-src 'self' https://*.nrk.no; style-src 'self' https://*.nrk.no 'unsafe-inline'`},
     historyApiFallback: { index: 'test.html' }, // Make test-file index
-    inline: false                               // Must use for CSP
-  },
-  plugins: [
-    new webpack.optimize.UglifyJsPlugin({
-      include: /\.min\.js$/,
-      sourceMap: true
-    })
-  ]
+    inline: false // Must use for CSP
+  }
 }
