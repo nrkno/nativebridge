@@ -11,15 +11,6 @@ const MOCK_TOPIC = 'MOCK_TOPIC'
 const WEBKIT = 'webkit'
 const ANDROID = 'android'
 
-const getMockDOM = () => new JSDOM(`
-<!doctype html>
-  <head></head>
-  <body>
-    mock document
-  </body>
-</html>
-`)
-
 const dispatchCustomEvent = (topic, data) => {
   window.dispatchEvent(new window.CustomEvent('nativebridge', {detail: {topic, data}}))
 }
@@ -53,30 +44,40 @@ const sendMessage = (json) => {
   postMessage(JSON.parse(json))
 }
 
-const mockDom = () => {
-  const {window} = getMockDOM()
-  global.window = window
-  global.document = window.document
-  nativeBridge.setupNativeLink()
-}
-
-const teardownDom = () => {
-  nativeBridge.destroy()
-  // delete global.window // Let window live after timeout
-  // delete global.document // Let window live after timeout
-}
-
 const setupSimulator = (simulator) => {
+  const mockDom = () => {
+    const { window } = new JSDOM(`
+    <!doctype html>
+      <head></head>
+      <body>
+        mock document
+      </body>
+    </html>
+    `)
+
+    global.window = window
+    global.document = window.document
+  }
+
+  const teardownDom = () => {
+    // delete global.window // Let window live after timeout used by "nativebridge unit test suite" > validateRpcInput
+    delete global.document
+  }
+
   beforeEach(() => {
     mockDom()
+
     if (simulator === WEBKIT) {
       global.window.webkit = {messageHandlers: {nativebridgeiOS: {postMessage}}}
     } else {
       global.window.NativeBridgeAndroid = {send: sendMessage}
     }
+
+    nativeBridge.setupNativeLink()
   })
 
   afterEach(() => {
+    nativeBridge.destroy()
     teardownDom()
   })
 }
