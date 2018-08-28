@@ -23,25 +23,20 @@
   </style>
 </head>
 <body>
-  <h1>
-    Testing nativebridge
-  </h1>
-
-  <input id="simulation" type="checkbox" checked /><label for="simulation">Simulation</label>
+  <h1>Testing nativebridge</h1>
+  <label><input name="simulation" type="checkbox" checked> Simulation</label>
 
   <h3>Sends:</h3>
-  <pre id="payload" contenteditable>
-  {
-    "topic": "test",
-    "data": {
-      "text": "gyldig JSON"
-    }
+  <pre id="payload" contenteditable>{
+  "topic": "test",
+  "data": {
+    "text": "gyldig JSON"
   }
-  </pre>
-  <button>Send to native!</button>
-  <button id="clear">Clear</button>
-  <div id="output"> </div>
+}</pre>
+  <button type="submit">Send to native!</button>
+  <button type="reset">Clear</button>
+  <div id="output"></div>
   <script src="nativebridge.min.js"></script>
-  <script src="test.js"></script>
+  <script src="index.js"></script>
 </body>
 </html>

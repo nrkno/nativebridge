@@ -3,3 +3,6 @@
 /node_modules
 /npm-debug*
 /yarn-error*
+**/*.min.js
+**/*.cjs.js
+**/*.js.map
