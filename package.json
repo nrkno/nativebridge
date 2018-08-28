@@ -22,7 +22,6 @@
   },
   "devDependencies": {
     "jest": "23.5.0",
-    "mocha": "5.2.0",
     "rollup": "0.65.0",
     "rollup-plugin-buble": "0.19.2",
     "rollup-plugin-serve": "0.4.2",
