@@ -1,7 +1,7 @@
 const buble = require('rollup-plugin-buble')
 const serve = require('rollup-plugin-serve')
-const {uglify} = require('rollup-plugin-uglify')
-const {version} = require('./package.json')
+const { uglify } = require('rollup-plugin-uglify')
+const { version } = require('./package.json')
 
 export default [{
   input: 'lib/nativebridge.js',
@@ -22,10 +22,10 @@ export default [{
   },
   plugins: [
     buble(),
-    uglify({output: {comments: /^!/}}),
+    uglify({ output: { comments: /^!/ } }),
     !process.env.ROLLUP_WATCH || serve({
       contentBase: 'lib',
-      headers: {'Content-Security-Policy': `default-src 'self' https://*.nrk.no; style-src 'self' https://*.nrk.no 'unsafe-inline'`}
+      headers: { 'Content-Security-Policy': `default-src 'self' https://*.nrk.no; style-src 'self' https://*.nrk.no 'unsafe-inline'` }
     })
   ]
 }]
