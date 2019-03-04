@@ -57,7 +57,7 @@ nativeBridge.rpc({
 npm install @nrk/nativebridge --save
 ```
 ```js
-import nativebridge from '@nrk/nativebridge'
+const nativebridge = require('@nrk/nativebridge')
 ```
 ##### USE WITH SCRIPT TAG:
 ```html
