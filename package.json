@@ -21,11 +21,11 @@
     "url": "git+https://github.com/nrkno/nativebridge.git"
   },
   "devDependencies": {
-    "jest": "23.6.0",
-    "rollup": "0.67.4",
-    "rollup-plugin-buble": "0.19.4",
-    "rollup-plugin-serve": "0.6.0",
-    "rollup-plugin-uglify": "6.0.0",
+    "jest": "24.1.0",
+    "rollup": "1.4.1",
+    "rollup-plugin-buble": "0.19.6",
+    "rollup-plugin-serve": "1.0.1",
+    "rollup-plugin-uglify": "6.0.2",
     "standard": "12.0.1"
   }
 }
