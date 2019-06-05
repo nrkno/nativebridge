@@ -54,7 +54,7 @@ nativeBridge.rpc({
 
 ##### USE WITH NPM:
 ```bash
-npm install @nrk/nativebridge --save
+npm install @nrk/nativebridge
 ```
 ```js
 const nativebridge = require('@nrk/nativebridge')
