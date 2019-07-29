@@ -23,7 +23,7 @@ export default [{
   plugins: [
     buble(),
     uglify({ output: { comments: /^!/ } }),
-    !process.env.ROLLUP_WATCH || serve({
+    Boolean(process.env.ROLLUP_WATCH) && serve({
       contentBase: 'lib',
       headers: { 'Content-Security-Policy': `default-src 'self' https://*.nrk.no; style-src 'self' https://*.nrk.no 'unsafe-inline'` }
     })
