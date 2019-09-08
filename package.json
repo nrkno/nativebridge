@@ -14,8 +14,7 @@
     "start": "rollup --config --watch",
     "static-publish": "npm run build && static-publish --directory=lib --latest --major --account=nrk-core",
     "test": "npm run build && jest && standard -v",
-    "test:watch": "jest --watch",
-    "fix": "standard --fix"
+    "test:watch": "jest --watch"
   },
   "repository": {
     "type": "git",
