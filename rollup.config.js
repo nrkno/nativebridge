@@ -25,7 +25,7 @@ export default [{
     uglify({ output: { comments: /^!/ } }),
     Boolean(process.env.ROLLUP_WATCH) && serve({
       contentBase: 'lib',
-      headers: { 'Content-Security-Policy': `default-src 'self' https://*.nrk.no; style-src 'self' https://*.nrk.no 'unsafe-inline'` }
+      headers: { 'Content-Security-Policy': 'default-src \'self\' https://*.nrk.no; style-src \'self\' https://*.nrk.no \'unsafe-inline\'' }
     })
   ]
 }]
