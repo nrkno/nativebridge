@@ -77,11 +77,11 @@ require(['https://static.nrk.no/nativebridge/X.X.X/nativebridge.min.js'], functi
 
 ##### Emit
 A data object is sent using `topic` as topic to an exposed method on either:
-- *Android*:
+- *iOS*:
 ```js
 window.webkit.messageHandlers.nativebridgeiOS.postMessage({topic: "test", data: {foo: "bar"}})
 ```
-- *iOS*:
+- *Android*:
 ```js
 window.NativeBridgeAndroid.send(JSON.stringify({topic: "test", data: {foo: "bar"}}))
 ```
